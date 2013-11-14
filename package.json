@@ -15,5 +15,9 @@
   "license": "MPLv2",
   "bugs": {
     "url": "https://github.com/mythmon/corsica/issues"
+  },
+  "dependencies": {
+    "promisesaplus": "~1.0.1",
+    "lvl": "0.0.2"
   }
 }
