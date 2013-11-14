@@ -1,0 +1,19 @@
+{
+  "name": "corsica",
+  "version": "0.0.0",
+  "description": "Put things in places.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mythmon/corsica.git"
+  },
+  "author": "Mozilla",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/mythmon/corsica/issues"
+  }
+}
