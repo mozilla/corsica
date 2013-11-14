@@ -4,6 +4,6 @@ framework:
   type: node
 mem: 128
 processes:
-    web: node start
+    web: npm start
 services:
   filesystem-corsica: filesystem
