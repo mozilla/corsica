@@ -12,7 +12,7 @@
     "url": "git://github.com/mythmon/corsica.git"
   },
   "author": "Mozilla",
-  "license": "BSD-2-Clause",
+  "license": "MPLv2",
   "bugs": {
     "url": "https://github.com/mythmon/corsica/issues"
   }
