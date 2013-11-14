@@ -1,0 +1,21 @@
+{
+    "undef": true,
+    "strict": false,
+    "browser": false,
+    "loopfunc": false,
+    "asi": false,
+    "eqeqeq": true,
+    "evil": false,
+    "mootools": false,
+    "shadow": false,
+    "unused": false,
+
+    "globals": {
+        "console": false,
+        "module": false,
+        "process": false,
+        "require": false,
+        "setImmediate": false,
+        "setInterval": false
+    }
+}
