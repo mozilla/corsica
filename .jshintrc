@@ -1,15 +1,18 @@
 {
-    "undef": true,
-    "strict": false,
-    "browser": false,
-    "loopfunc": false,
     "asi": false,
+    "browser": false,
+    "browser": true,
     "eqeqeq": true,
     "evil": false,
+    "loopfunc": false,
     "node": true,
     "shadow": false,
+    "strict": false,
+    "undef": true,
     "unused": false,
 
     "globals": {
+        "makeEl": true,
+        "io": true
     }
 }

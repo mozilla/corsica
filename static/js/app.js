@@ -1,4 +1,3 @@
-
 console.log('Welcome to Corsica.');
 console.log('To the NORTH there is water.');
 console.log('To the WEST there is water.');
@@ -55,10 +54,10 @@ function handleURL(url) {
   contentEl.appendChild(iframe);
 }
 
-console.log('Waiting for connection to server...')
+console.log('Waiting for connection to server...');
 
 /* Socket.IO connections */
-socket = io.connect('/');
+var socket = io.connect('/');
 
 socket.on('connect', function() {
   console.log('Connection to server established.');
@@ -73,6 +72,7 @@ socket.on('content', function(msg) {
   }
   if (!payAttention(msg.screen)) {
     console.log('You receive a message, but it\'s not for you...');
+    return;
   }
   switch (msg.type) {
     case 'url':
