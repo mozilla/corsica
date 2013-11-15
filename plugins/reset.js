@@ -1,5 +1,5 @@
 /* Description:
- *   Implements reset behaviour to a default URL
+ *   pushes a default URL to screens when /reset is hit
  *
  * Dependencies:
  *   None
@@ -7,14 +7,11 @@
  * Configuration:
  *   DEFAULT_URL
  *
- * Commands:
- *   reset - Pushes the default url to the screen
- *
  * Author:
  *    lonnen
  */
 module.exports = function(corsica) {
-  corsica.on('content', function(msg, promise) {
+  corsica.on('reset', function(content, promise) {
     promise.fulfill(
       process.env.DEFAULT_URL || "http://i.imgur.com/SBvarB8.gif"
     );
