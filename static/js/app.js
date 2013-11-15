@@ -69,6 +69,7 @@ socket.on('oh hai', function() {
 });
 
 socket.on('content', function(msg) {
+  console.log('got message', msg);
   var type = msg.type;
   if (!type) {
     console.warn('You thought you heard something. No, just the waves.');
