@@ -54,6 +54,17 @@ function handleURL(url) {
   contentEl.appendChild(iframe);
 }
 
+function handleHTML(html) {
+  contentEl.innerHTML = '';
+  var blob = new Blob([html], { "type" : "text/html" });
+  var url = URL.createObjectURL(blob);
+  var iframe = makeEl('iframe', null, {
+    sandbox: 'allow-same-origin allow-scripts allow-forms',
+    src: url
+  });
+  contentEl.appendChild(iframe);
+}
+
 function init() {
   socket.emit('init', {name: config.name});
 }
