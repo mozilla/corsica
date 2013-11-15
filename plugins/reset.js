@@ -10,11 +10,12 @@
  * Author:
  *    lonnen, mythmon
  */
+
+var DEFAULT_URL = '/default.html';
+
 module.exports = function(corsica) {
   corsica.on('reset', function(content, promise) {
-    var url = content.url ||
-              corsica.config.DEFAULT_URL ||
-              'http://imgur.com/SBvarB8.gif';
+    var url = DEFAULT_URL;
 
     content.type = 'url';
     content.url = url;
