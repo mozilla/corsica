@@ -8,15 +8,15 @@ var config;
 try {
   config = localStorage.getItem('config');
   if (config) {
-    config = JSON.parse('config');
-    if (!config.corsica) {
+    config = JSON.parse(config);
+    if (config) {
       console.log('Welcome back, old friend.');
     } else {
       config = undefined;
     }
   }
 } catch (e) {
-  console.warn('Config could not be parsed.');
+  console.warn('Config could not be parsed: ' + e);
 }
 if (!config) {
   console.log('You\'re new here, aren\'t you.');
@@ -54,6 +54,10 @@ function handleURL(url) {
   contentEl.appendChild(iframe);
 }
 
+function init() {
+  socket.emit('init', {name: config.name});
+}
+
 console.log('Waiting for connection to server...');
 
 /* Socket.IO connections */
@@ -61,6 +65,19 @@ var socket = io.connect('/');
 
 socket.on('connect', function() {
   console.log('Connection to server established.');
+
+  if (config.name === undefined) {
+    console.log('getting a name');
+    socket.emit('getName', function(name) {
+      config.name = name;
+      console.log('I think my name is ' + name + '. Hello.');
+      writeConfig();
+      init();
+    });
+  } else {
+    console.log('My name is ' + config.name);
+    init();
+  }
 });
 
 socket.on('content', function(msg) {
