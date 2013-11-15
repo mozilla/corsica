@@ -6,16 +6,10 @@
     "asi": false,
     "eqeqeq": true,
     "evil": false,
-    "mootools": false,
+    "node": true,
     "shadow": false,
     "unused": false,
 
     "globals": {
-        "console": false,
-        "module": false,
-        "process": false,
-        "require": false,
-        "setImmediate": false,
-        "setInterval": false
     }
 }

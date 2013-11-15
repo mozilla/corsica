@@ -64,10 +64,6 @@ socket.on('connect', function() {
   console.log('Connection to server established.');
 });
 
-socket.on('oh hai', function() {
-  console.log('A friendly server says hello.');
-});
-
 socket.on('content', function(msg) {
   console.log('got message', msg);
   var type = msg.type;
