@@ -1,7 +1,7 @@
 name: corsica
 instances: 1
 framework:
-  type: node
+  type: node10
 mem: 128
 processes:
     web: npm start
