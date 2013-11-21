@@ -21,9 +21,17 @@ module.exports = function(corsica) {
     });
 
   corsica.on('reset', function(content, promise) {
+    settings.get('defaultUrl').then(function(defaultUrl) {
+      content.type = 'url';
+      content.url = defaultUrl;
+      corsica.sendMessage('content', content);
+      console.log('reset: ', content);
+      promise.fulfill(content);
+    });
+
     content.type = 'url';
     content.url = settings.get('defaultUrl');
-    console.log('reset: ', content);
+    console.log('reset:', content);
 
     corsica.sendMessage('content', content);
     promise.fulfill(content);

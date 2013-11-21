@@ -15,6 +15,9 @@
  *
  * return the original object with updated changes
  */
+
+var promises = require('promisesaplus');
+
 function extend() {
   var obj = arguments[0];
   var sources = [];
@@ -39,11 +42,15 @@ function Brain() {
   this.data = {};
 }
 
+// This api doesn't need to by async yet, but it probably will later.
 Brain.prototype.get = function(key) {
-  return this.data[key] || null;
+  var p = promises();
+  p.fulfill(this.data[key] || null);
+  return p;
 };
 
 Brain.prototype.set = function(key, value) {
+  var p = promises();
   var pair;
   if (key === Object(key)) {
     pair = key;
@@ -53,16 +60,20 @@ Brain.prototype.set = function(key, value) {
     pair[key] = value;
   }
   extend(this.data, pair);
+  p.fulfill();
+  return p;
 };
 
 Brain.prototype.remove = function(key) {
+  var p = promises();
   if (this.data[key] !== null) {
     delete this.data[key];
+    p.fulfill(true);
+  } else {
+    p.fulfill(false);
   }
-  return this;
+  return p;
 };
-
-var DEFAULT_URL = '/default.html';
 
 module.exports = function(corsica) {
   corsica.brain = new Brain();
