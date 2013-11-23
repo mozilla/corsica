@@ -1,11 +1,11 @@
 /* Description:
- *   pushes a default URL to screens when /reset is hit
+ *   Stores data for other plugins. Basic key value store.
  *
  * Dependencies:
  *   None
  *
  * Configuration:
- *   None
+ *   STATE_DIR_PATH
  *
  * Author:
  *    lonnen
@@ -16,7 +16,8 @@
  * return the original object with updated changes
  */
 
-var promises = require('promisesaplus');
+var promise = require('promisesaplus');
+var lvl = require('lvl');
 
 function extend() {
   var obj = arguments[0];
@@ -38,19 +39,21 @@ function extend() {
   return obj;
 }
 
-function Brain() {
-  this.data = {};
+function Brain(corsica) {
+  this.db = lvl(corsica.config.STATE_DIR_PATH);
 }
 
-// This api doesn't need to by async yet, but it probably will later.
 Brain.prototype.get = function(key) {
-  var p = promises();
-  p.fulfill(this.data[key] || null);
-  return p;
+  return this.db.getObj(key).then(
+    null,
+    function err(err) {
+      return null;
+    }
+  );
 };
 
 Brain.prototype.set = function(key, value) {
-  var p = promises();
+  var p = promise();
   var pair;
   if (key === Object(key)) {
     pair = key;
@@ -65,7 +68,7 @@ Brain.prototype.set = function(key, value) {
 };
 
 Brain.prototype.remove = function(key) {
-  var p = promises();
+  var p = promise();
   if (this.data[key] !== null) {
     delete this.data[key];
     p.fulfill(true);
@@ -76,5 +79,5 @@ Brain.prototype.remove = function(key) {
 };
 
 module.exports = function(corsica) {
-  corsica.brain = new Brain();
+  corsica.brain = new Brain(corsica);
 };
