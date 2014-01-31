@@ -17,8 +17,9 @@
     "url": "https://github.com/mythmon/corsica/issues"
   },
   "dependencies": {
-    "promisesaplus": "~1.0.1",
-    "lvl": "0.0.2",
-    "socket.io": "~0.9.16"
+    "lvl": "0.1.3",
+    "socket.io": "~0.9.16",
+    "es6-promise": "~0.1.1",
+    "express": "~3.4.8"
   }
 }

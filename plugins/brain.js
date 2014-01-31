@@ -16,7 +16,7 @@
  * return the original object with updated changes
  */
 
-var promise = require('promisesaplus');
+var Promise = require('es6-promise').Promise;
 var lvl = require('lvl');
 
 function extend() {
@@ -44,38 +44,18 @@ function Brain(corsica) {
 }
 
 Brain.prototype.get = function(key) {
-  return this.db.getObj(key).then(
-    null,
-    function err(err) {
+  return Promise.cast(this.db.getObj(key))
+    .catch(function(err) {
       return null;
-    }
-  );
+    });
 };
 
 Brain.prototype.set = function(key, value) {
-  var p = promise();
-  var pair;
-  if (key === Object(key)) {
-    pair = key;
-  }
-  else {
-    pair = {};
-    pair[key] = value;
-  }
-  extend(this.data, pair);
-  p.fulfill();
-  return p;
+  return Promise.cast(this.db.putObj(key,value));
 };
 
 Brain.prototype.remove = function(key) {
-  var p = promise();
-  if (this.data[key] !== null) {
-    delete this.data[key];
-    p.fulfill(true);
-  } else {
-    p.fulfill(false);
-  }
-  return p;
+  return Promise.cast(this.db.putObj(key, null));
 };
 
 module.exports = function(corsica) {

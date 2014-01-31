@@ -5,7 +5,7 @@
  *   Brain
  */
 
-var promise = require('promisesaplus');
+var Promise = require('es6-promise').Promise;
 
 var specs = {};
 var corsica;
@@ -45,36 +45,31 @@ function setup(name, spec, defaults) {
   var key = 'settings::' + name;
   specs[name] = spec;
 
-  var setupPromise = corsica.brain.get(key).then(function(settings) {
-    if (settings === null) {
-      settings = {};
-    }
-    for (var k in defaults) {
-      if (!(k in settings)) {
-        settings[k] = defaults[k];
-      }
-    }
-    return corsica.brain.set(key, settings);
+  var setupDeferred = new Promise(function(resolve, reject) {
+    corsica.brain.get(key)
+      .then(function(settings) {
+        settings = settings || {};
+        for (var k in defaults) {
+          if (!(k in settings)) {
+            settings[k] = defaults[k];
+          }
+        }
+        resolve(corsica.brain.set(key, settings));
+      })
   });
 
-  // These shouldn't run before the above is finished.
-  var ret = {
+  return {
     get: function() {
-      var p = promise();
-      setupPromise.then(function() {
-        corsica.brain.get(key).then(p.fulfill);
+      return setupDeferred.then(function() {
+        return corsica.brain.get(key);
       });
-      return p;
     },
     set: function(value) {
-      var p = promise();
-      setupPromise.then(function() {
-        corsica.brain.set(key, value).then(p.fulfill);
+      return setupDeferred.then(function() {
+        return corsica.brain.set(key, value);
       });
-      return p;
     },
   };
-  return ret;
 }
 
 module.exports = function(corsica_) {

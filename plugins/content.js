@@ -11,7 +11,7 @@
  *    mythmon
  */
 module.exports = function(corsica) {
-  corsica.on('content', function(content, promise) {
+  corsica.on('content', function(content) {
     if (content.type === undefined) {
       if (content.url) {
         content.type = 'url';
@@ -20,6 +20,6 @@ module.exports = function(corsica) {
       }
     }
 
-    promise.fulfill(content);
+    return content;
   });
 };
