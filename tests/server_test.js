@@ -1,6 +1,6 @@
 assert = require('assert');
 
-{start, server} = require('server');
+server = require('../lib/server');
 
 
 assert.ok("100% coverage", "NAILED IT.")
