@@ -66,7 +66,8 @@ function handleHTML(html) {
 }
 
 function init() {
-  socket.emit('init', {name: config.name});
+  console.log('My name is ' + config.name);
+  sendMesssage('init', {name: config.name});
 }
 
 console.log('Waiting for connection to server...');
@@ -79,20 +80,17 @@ socket.on('connect', function() {
 
   if (config.name === undefined) {
     console.log('getting a name');
-    socket.emit('getName', function(name) {
+    sendMesssage('getName').then(function(name) {
       config.name = name;
-      console.log('I think my name is ' + name + '. Hello.');
       writeConfig();
       init();
     });
   } else {
-    console.log('My name is ' + config.name);
     init();
   }
 });
 
 socket.on('content', function(msg) {
-  console.log('got message', msg);
   var type = msg.type;
   if (!type) {
     console.warn('You thought you heard something. No, just the waves.');
@@ -118,3 +116,41 @@ socket.on('content', function(msg) {
 socket.on('disconnect', function() {
   console.log('Disconnected from server.');
 });
+
+
+var sendMesssage = (function() {
+  var messageReciepts = {};
+  var nextId = 0;
+
+  function sendMesssage(name, message) {
+    return new Promise(function(resolve, reject) {
+      var clientId = nextId++;
+      messageReciepts[clientId] = {resolve: resolve, reject: reject};
+      socket.emit('msg', {
+        clientId: clientId,
+        name: name,
+        message: message,
+      });
+    });
+  }
+
+  socket.on('resolve', function(data) {
+    var clientId = data.clientId;
+    var message = data.message;
+    messageReciepts[clientId].resolve(message);
+  });
+
+  socket.on('reject', function(data) {
+    var clientId = data.clientId;
+    var message = data.message;
+    messageReciepts[clientId].reject(message);
+  });
+
+  return sendMesssage;
+})();
+
+var messagePromises = {};
+
+function sendMesssage(name, message) {
+  socket.emit('message', {name: name, message: message});
+}
