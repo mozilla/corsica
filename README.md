@@ -1,4 +1,4 @@
-# corsica
+![corsica](https://raw.github.com/mozilla/corsica/master/static/corsica.png)
 
 ![build status: gold](https://travis-ci.org/mozilla/corsica.png)
 
