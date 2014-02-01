@@ -55,7 +55,11 @@ function setup(name, spec, defaults) {
           }
         }
         resolve(corsica.brain.set(key, settings));
-      })
+      });
+  });
+
+  corsica.on('get-settings', function (content) {
+
   });
 
   return {

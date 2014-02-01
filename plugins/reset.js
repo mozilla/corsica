@@ -13,16 +13,16 @@
 
 var DEFAULT_URL = '/default.html';
 
-module.exports = function(corsica) {
+module.exports = function (corsica) {
   var settings = corsica.settings.setup('reset', {
-      defaultUrl: String,
-    }, {
-      defaultUrl: '/default.html',
-    });
+    defaultUrl: String,
+  }, {
+    defaultUrl: '/default.html',
+  });
 
-  corsica.on('reset', function(content) {
+  corsica.on('reset', function (content) {
     return settings.get()
-      .then(function(settings) {
+      .then(function (settings) {
         content.type = 'url';
         content.url = settings.defaultUrl;
         corsica.sendMessage('content', content);
