@@ -58,13 +58,6 @@ function setup(name, spec, defaults) {
       });
   });
 
-  corsica.on('settings.getAll', function () {
-    console.log('asked for setting');
-    return new Promise(function (resolve) {
-      resolve('foo');
-    });
-  });
-
   return {
     get: function() {
       return setupDeferred.then(function() {
@@ -84,4 +77,16 @@ module.exports = function(corsica_) {
   corsica.settings = {
     setup: setup,
   };
+
+  corsica.on('settings.getSpecs', function () {
+    console.log('asked for setting');
+    return new Promise(function (resolve) {
+      resolve(specs);
+    });
+  });
+
+  corsica.on('settings.get', function (name) {
+    return corsica.brain.get('settings::' + name);
+  });
+
 };

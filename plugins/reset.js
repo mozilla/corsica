@@ -15,7 +15,7 @@ var DEFAULT_URL = '/default.html';
 
 module.exports = function (corsica) {
   var settings = corsica.settings.setup('reset', {
-    defaultUrl: String,
+    defaultUrl: 'String',
   }, {
     defaultUrl: '/default.html',
   });

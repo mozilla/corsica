@@ -1,3 +1,4 @@
+/* global socket:true */
 /* Socket.IO connections */
 var socket = io.connect('/');
 
@@ -8,8 +9,6 @@ var sendMessage = (function () {
   socket.on('resolve', function (data) {
     var clientId = data.clientId;
     var message = data.message;
-    console.log('recieved data', data);
-    console.log(messageReciepts[clientId].resolve);
     messageReciepts[clientId].resolve(message);
   });
 
