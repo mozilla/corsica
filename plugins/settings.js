@@ -58,8 +58,11 @@ function setup(name, spec, defaults) {
       });
   });
 
-  corsica.on('get-settings', function (content) {
-
+  corsica.on('settings.getAll', function () {
+    console.log('asked for setting');
+    return new Promise(function (resolve) {
+      resolve('foo');
+    });
   });
 
   return {

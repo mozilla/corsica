@@ -1,88 +1,17 @@
 
-function payAttention(name) {
-  if (name instanceof Array) {
-    for (var i=0; i<name.length; i++) {
-      if (name[i] === config.name) {
-        return true;
-      }
-    }
-    return false;
-  }
-  return config.name === name;
-}
-
-var contentEl = document.querySelector('#content');
-
-function handleURL(url) {
-  contentEl.innerHTML = '';
-  var iframe = makeEl('iframe', null, {
-    sandbox: 'allow-same-origin allow-scripts allow-forms',
-    src: url
-  });
-  contentEl.appendChild(iframe);
-}
-
-function handleHTML(html) {
-  contentEl.innerHTML = '';
-  var blob = new Blob([html], { "type" : "text/html" });
-  var url = URL.createObjectURL(blob);
-  var iframe = makeEl('iframe', null, {
-    sandbox: 'allow-same-origin allow-scripts allow-forms',
-    src: url
-  });
-  contentEl.appendChild(iframe);
-}
-
-function init() {
-  socket.emit('init', {name: config.name});
-}
-
 console.log('Waiting for connection to server...');
 
-/* Socket.IO connections */
-var socket = io.connect('/');
-
 socket.on('connect', function() {
-  console.log('Connection to server established.');
-
-  if (config.name === undefined) {
-    console.log('getting a name');
-    socket.emit('getName', function(name) {
-      config.name = name;
-      console.log('I think my name is ' + name + '. Hello.');
-      writeConfig();
-      init();
-    });
-  } else {
-    console.log('My name is ' + config.name);
-    init();
-  }
+  init();
 });
 
-socket.on('content', function(msg) {
-  console.log('got message', msg);
-  var type = msg.type;
-  if (!type) {
-    console.warn('You thought you heard something. No, just the waves.');
-    return;
-  }
-  if (!payAttention(msg.screen)) {
-    console.log('You receive a message, but it\'s not for you...');
-    return;
-  }
-  switch (msg.type) {
-    case 'url':
-      handleURL(msg.url);
-      break;
-    case 'html':
-      handleHTML(msg.content);
-      break;
-    default:
-      console.log('A voice speaks, in an unintelligible language.');
-      break;
-  }
-});
-
-socket.on('disconnect', function() {
+socket.on('disconnect', function () {
   console.log('Disconnected from server.');
 });
+
+function init() {
+  console.log('Connection to server established.');
+  sendMessage('settings.getAll', function (r) {
+    console.log('f');
+  });
+}

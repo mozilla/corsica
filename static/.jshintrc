@@ -1,0 +1,9 @@
+{
+    "globals": {
+        "URL": false,
+        "socket": false,
+        "makeEl": true,
+        "io": true,
+        "Promise": false
+    }
+}

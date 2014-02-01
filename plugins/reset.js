@@ -8,7 +8,7 @@
  *   default_url
  *
  * Author:
- *    lonnen, mythmon
+ *    lonnen, mythmon, potch
  */
 
 var DEFAULT_URL = '/default.html';
