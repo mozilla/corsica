@@ -21,10 +21,10 @@ module.exports = function(corsica) {
     });
 
   corsica.on('reset', function(content) {
-    return settings.get('defaultUrl')
-      .then(function(defaultUrl) {
+    return settings.get()
+      .then(function(settings) {
         content.type = 'url';
-        content.url = defaultUrl;
+        content.url = settings.defaultUrl;
         corsica.sendMessage('content', content);
         return content;
       });
