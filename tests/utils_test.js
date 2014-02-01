@@ -1,5 +1,5 @@
-assert = require('assert');
+var assert = require('assert');
 
-utils = require('../lib/utils');
+var utils = require('../lib/utils');
 
 assert.notStrictEqual('what I hath wrought', '100% code coverage');

@@ -1,13 +1,13 @@
-assert = require('assert');
+var assert = require('assert');
 
 // poison environment before loading the config
-process.env['plugins'] = 'not a list'
+process.env.plugins = 'not a list';
 process.env['corsica-test'] = 'truthy';
 
-config = require('../lib/config.js');
+var config = require('../lib/config.js');
 
 
-assert.ok(config['plugins'], 'does it read the default config?');
+assert.ok(config.plugins, 'does it read the default config?');
 
 assert.ok(
   config['corsica-test'],

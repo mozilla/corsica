@@ -55,7 +55,7 @@ function setup(name, spec, defaults) {
           }
         }
         resolve(corsica.brain.set(key, settings));
-      })
+      });
   });
 
   return {
