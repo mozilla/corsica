@@ -21,4 +21,7 @@
              A30,30 0 1 1 80,50
              L80,50 z"/>
   </g>
+  <g transform="translate(50,50) scale(1.4) rotate(11) translate(-50,-50)">
+    <path fill="#fff" d="M50,30 L40,55 52,52 50,70 60,45 48,48 z"/>
+  </g>
 </svg>
