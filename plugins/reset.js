@@ -2,18 +2,16 @@
  *   pushes a default URL to screens when /reset is hit
  *
  * Dependencies:
- *   None
+ *   settings
  *
  * Configuration:
- *   default_url
+ *   defaultUrl
  *
  * Author:
  *    lonnen, mythmon
  */
 
-var DEFAULT_URL = '/default.html';
-
-module.exports = function(corsica) {
+module.exports = function (corsica) {
   var settings = corsica.settings.setup('reset', {
       defaultUrl: String,
     }, {
