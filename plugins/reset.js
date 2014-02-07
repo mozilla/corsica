@@ -13,16 +13,19 @@
 
 module.exports = function (corsica) {
   var settings = corsica.settings.setup('reset', {
-      defaultUrl: String,
+      defaultUrl: '[String]',
     }, {
-      defaultUrl: '/default.html',
+      defaultUrl: ['/default.html', 'http://xkcd.com'],
     });
+
+  var urlIndex = 0;
 
   corsica.on('reset', function(content) {
     return settings.get()
       .then(function(settings) {
         content.type = 'url';
-        content.url = settings.defaultUrl;
+        content.url = settings.defaultUrl[urlIndex];
+        urlIndex = (urlIndex + 1) % settings.defaultUrl.length;
         corsica.sendMessage('content', content);
         return content;
       });
