@@ -41,9 +41,9 @@ var corsica;
  *      settings have been set to `valueObj`, or rejects otherwise.
  *      `valueObj` should be all the keys in settings. This is not merge.
  */
-function setup(name, spec, defaults) {
+function setup(name, defaults) {
   var key = 'settings::' + name;
-  specs[name] = spec;
+  specs[name] = defaults;
 
   var setupDeferred = new Promise(function(resolve, reject) {
     corsica.brain.get(key)
@@ -84,8 +84,10 @@ module.exports = function(corsica_) {
     });
   });
 
-  corsica.on('settings.get', function (name) {
-    return corsica.brain.get('settings::' + name);
+  corsica.on('settings.get', function (plugin) {
+    return corsica.brain.get('settings::' + plugin).then(function(settings) {
+      return corsica.utils.merge(specs[plugin], settings);
+    });
   });
 
 };

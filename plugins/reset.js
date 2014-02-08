@@ -13,12 +13,9 @@
 
 module.exports = function (corsica) {
   var settings = corsica.settings.setup('reset', {
-      defaultUrl: '[String]',
-    }, {
-      defaultUrl: ['/default.html', 'http://xkcd.com'],
-    });
+    defaultUrl: ['/default.html', 'http://xkcd.com', 'http://potch.me'],
+  });
 
-  corsica.on('reset', function (content) {
   var urlIndex = 0;
 
   corsica.on('reset', function(content) {

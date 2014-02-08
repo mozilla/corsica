@@ -65,10 +65,24 @@ h1, h2, h3, h4, h5, h6 {
 }
 .plugin input {
   font-size: 1rem;
-  display: inline-block;
-  width: calc(100% - 128px);
   padding: .5em;
   border: 0;
+}
+.plugin .many, .plugin .row > input {
+  vertical-align: middle;
+  display: inline-block;
+  width: calc(100% - 128px);
+  position: relative;
+}
+.plugin .many input {
+  font-size: 1rem;
+  display: block;
+  width: 100%;
+  padding: .5em;
+  margin-top: 1em;
+}
+.plugin .many input:first-child {
+  margin-top: 0;
 }
 .plugin label {
   width: 128px;
