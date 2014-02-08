@@ -57,7 +57,6 @@ function createSection(name, spec) {
         var rows = spec[field];
         for (var i = 0; i < rows.length; i++) {
           input = makeEl('input', null, {
-            'name': field,
             'value': rows[i]
           });
           many.appendChild(input);
@@ -82,7 +81,7 @@ function createSection(name, spec) {
       var obj = {};
       for (var field in spec) {
         if (spec[field] instanceof Array) {
-          var inputs = document.querySelectorAll('input[name=' + field + ']:not(.empty)');
+          var inputs = form.querySelectorAll('[data-many=' + field + '] input:not(.empty)');
           obj[field] = [];
           for (var i = 0; i < inputs.length; i++) {
             obj[field].push(inputs[i].value);
@@ -147,7 +146,6 @@ function createSection(name, spec) {
             input.value = v;
           } else if (v !== undefined && !input) {
             input = makeEl('input', null, {
-              'name': field + i,
               'value': val[i]
             });
             many.insertBefore(input, many.querySelector('.empty'));
