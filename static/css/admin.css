@@ -68,6 +68,10 @@ h1, h2, h3, h4, h5, h6 {
   padding: .5em;
   border: 0;
 }
+.plugin .row input.check {
+  width: 1em;
+  vertical-align: middle;
+}
 .plugin .many, .plugin .row > input {
   vertical-align: top;
   display: inline-block;

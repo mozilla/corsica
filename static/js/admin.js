@@ -49,12 +49,13 @@ function createSection(name, spec) {
       row = makeEl('div.row');
       var input;
       row.appendChild(makeEl('label', field));
-      if (spec[field] instanceof Array) {
+      var val = spec[field];
+      if (val instanceof Array) {
         var many = makeEl('div.many', null, {
           'data-many': field
         });
         row.appendChild(many);
-        var rows = spec[field];
+        var rows = val;
         for (var i = 0; i < rows.length; i++) {
           input = makeEl('input', null, {
             'value': rows[i]
@@ -63,10 +64,18 @@ function createSection(name, spec) {
         }
         many.appendChild(makeEl('input.empty'));
       } else {
-        input = makeEl('input', null, {
-          'name': field,
-          'value': spec[field]
-        });
+        if (val === true || val === false) {
+          input = makeEl('input.check', null, {
+            'type': 'checkbox',
+            'name': field
+          });
+          if (val) input.setAttribute('checked', 'checked');
+        } else {
+          input = makeEl('input', null, {
+            'name': field,
+            'value': val
+          });
+        }
         row.appendChild(input);
       }
       form.appendChild(row);
@@ -87,7 +96,12 @@ function createSection(name, spec) {
             obj[field].push(inputs[i].value);
           }
         } else {
-          obj[field] = form.querySelector('input[name=' + field + ']').value;
+          var input = form.querySelector('input[name=' + field + ']');
+          if (input.classList.contains('check')) {
+            obj[field] = !!input.checked;
+          } else {
+            obj[field] = input.value;
+          }
         }
       }
       console.log('updating ' + name + '...');
@@ -154,9 +168,13 @@ function createSection(name, spec) {
           }
         }
       } else {
-        input = form.querySelectorAll('[name=' + field + ']');
+        input = form.querySelector('[name=' + field + ']');
         if (input) {
-          input.value = values[field];
+          if (val === true || val === false) {
+            input.checked = val;
+          } else {
+            input.value = val;
+          }
         }
       }
     }
