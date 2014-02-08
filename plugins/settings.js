@@ -18,30 +18,31 @@ var corsica;
  *
  *   namespace - The namespace to store setting under. This should
  *     probably be the plugin name.
- *   spec - The specification for your setting. This is an object where
+ *   defaults - The specification for your setting. This is an object where
  *     the keys are the names of your settings, and the values are the
- *     types. Types are things like `String`, `Boolean`, or
- *     `Array(String)`, ie: Constructors, or Constructors in an array.
- *   defaults (optional) - This is an object with that has keys which are
- *     a subset of the keys for spec. If provided, the values will be set
- *     as default values for the settings.
+ *     default values.
  *
- * Example specification:
+ * Example defaults:
  *
  *   {
- *     resetURL: String,
- *     timeout: Number,
- *     screens: Array(String),
- *     active: Boolean,
+ *     resetURL: 'http://example.com/'
+ *     timeout: 1000,
+ *     screens: ['foo', 'bar'],
+ *     active: true
  *   }
  *
- * Returns an object with the following methods:
+ * Returns an EventEmitter with the following methods:
  *
  *   get() - returns a promise that will be resolved with all the
  *      settings associated with this namespace.
  *   set(valueObj) - returns a promise that will be resolved when the
  *      settings have been set to `valueObj`, or rejects otherwise.
  *      `valueObj` should be all the keys in settings. This is not merge.
+ *
+ * And the following events:
+ *
+ *   'updated' - fired when the settings are updated. Called with an
+ *       object containings the new settings.
  */
 function setup(name, defaults) {
   var key = 'settings::' + name;
