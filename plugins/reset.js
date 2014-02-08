@@ -13,7 +13,7 @@
 
 module.exports = function (corsica) {
   var settings = corsica.settings.setup('reset', {
-    defaultUrl: ['/default.html', 'http://xkcd.com', 'http://potch.me'],
+    defaultUrl: ['/default.html', 'http://xkcd.com'],
   });
 
   var urlIndex = 0;
