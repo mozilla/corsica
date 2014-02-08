@@ -6,8 +6,10 @@
  */
 
 var Promise = require('es6-promise').Promise;
+var EventEmitter = require("events").EventEmitter;
 
 var specs = {};
+var emitters = {};
 var corsica;
 
 /* Setup a settings namespace.
@@ -45,33 +47,36 @@ function setup(name, defaults) {
   var key = 'settings::' + name;
   specs[name] = defaults;
 
-  var setupDeferred = new Promise(function(resolve, reject) {
+  var setupDeferred = new Promise(function (resolve, reject) {
     corsica.brain.get(key)
-      .then(function(settings) {
+      .then(function (settings) {
         settings = settings || {};
         resolve(corsica.brain.set(key, settings));
       });
   });
 
-  return {
-    get: function() {
-      return setupDeferred
-        .then(function() {
-          return corsica.brain.get(key);
-        })
-        .then(function(settings) {
-          return corsica.utils.merge(defaults, settings);
-        });
-    },
-    set: function(value) {
-      return setupDeferred.then(function() {
-        return corsica.brain.set(key, value);
+  var emitter = new EventEmitter();
+  emitter.get = function () {
+    return setupDeferred
+      .then(function () {
+        return corsica.brain.get(key);
+      })
+      .then(function (settings) {
+        return corsica.utils.merge(defaults, settings);
       });
-    },
   };
+  emitter.set = function (value) {
+    return setupDeferred.then(function () {
+      return corsica.brain.set(key, value);
+    });
+  };
+
+  emitters[name] = emitter;
+
+  return emitter;
 }
 
-module.exports = function(corsica_) {
+module.exports = function (corsica_) {
   corsica = corsica_;
   corsica.settings = {
     setup: setup,
@@ -85,8 +90,16 @@ module.exports = function(corsica_) {
   });
 
   corsica.on('settings.get', function (plugin) {
-    return corsica.brain.get('settings::' + plugin).then(function(settings) {
+    return corsica.brain.get('settings::' + plugin).then(function (settings) {
       return corsica.utils.merge(specs[plugin], settings);
+    });
+  });
+
+  corsica.on('settings.set', function (opts) {
+    var plugin = opts.plugin;
+    var values = opts.settings;
+    return corsica.brain.set('settings::' + plugin, values).then(function () {
+      emitters[plugin].emit('updated', values);
     });
   });
 

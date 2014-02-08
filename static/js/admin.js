@@ -43,8 +43,10 @@ function createSection(name, spec) {
     var form = makeEl('form', null, { id: 'form-' + name });
     section.appendChild(form);
 
+    var row;
+
     for (var field in spec) {
-      var row = makeEl('div.row');
+      row = makeEl('div.row');
       var input;
       row.appendChild(makeEl('label', field));
       if (spec[field] instanceof Array) {
@@ -55,7 +57,7 @@ function createSection(name, spec) {
         var rows = spec[field];
         for (var i = 0; i < rows.length; i++) {
           input = makeEl('input', null, {
-            'name': field + i,
+            'name': field,
             'value': rows[i]
           });
           many.appendChild(input);
@@ -71,19 +73,75 @@ function createSection(name, spec) {
       form.appendChild(row);
     }
 
+    row = makeEl('div.row');
+    row.appendChild(makeEl('button.save', 'save'));
+    form.appendChild(row);
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var obj = {};
+      for (var field in spec) {
+        if (spec[field] instanceof Array) {
+          var inputs = document.querySelectorAll('input[name=' + field + ']:not(.empty)');
+          obj[field] = [];
+          for (var i = 0; i < inputs.length; i++) {
+            obj[field].push(inputs[i].value);
+          }
+        } else {
+          obj[field] = form.querySelector('input[name=' + field + ']').value;
+        }
+      }
+      console.log('updating ' + name + '...');
+      sendMessage('settings.set', {
+          'plugin': name,
+          'settings': obj
+        }).then(function () {
+        console.log(name + ' updated.');
+      });
+    });
+
+    form.addEventListener('keydown', function (e) {
+      var tgt = e.target;
+      if (tgt.tagName.toLowerCase() === 'input') {
+        if (tgt.classList.contains('empty')) {
+          setTimeout(function () {
+            if (tgt.value.length > 0) {
+              var many = tgt.parentNode;
+              tgt.classList.remove('empty');
+              many.appendChild(makeEl('input.empty'));
+            }
+          }, 0);
+        }
+      }
+    });
+
+    form.addEventListener('blur', function (e) {
+      var tgt = e.target;
+      if (tgt.tagName.toLowerCase() === 'input') {
+        if (!tgt.classList.contains('empty') &&
+            tgt.parentNode.classList.contains('many')) {
+          if (tgt.value.length === 0) {
+            var many = tgt.parentNode;
+            many.removeChild(tgt);
+          }
+        }
+      }
+    }, true);
+
     settingsEl.appendChild(section);
   }
 
   sendMessage('settings.get', name).then(function (values) {
-    var form = section.querySelector('form');
-    console.log(values);
+    var form = section.querySelector('form'),
+        input;
+
     for (var field in values) {
       var val = values[field];
       if (val instanceof Array) {
         var many = form.querySelector('[data-many=' + field + ']');
         var inputs = many.querySelectorAll('input:not(.empty)');
         for (var i = 0; i < Math.max(val.length, inputs.length); i++) {
-          var input = inputs[i];
+          input = inputs[i];
           var v = val[i];
           if (v !== undefined && input) {
             input.value = v;
@@ -98,7 +156,7 @@ function createSection(name, spec) {
           }
         }
       } else {
-        var input = form.querySelectorAll('[name=' + field + ']');
+        input = form.querySelectorAll('[name=' + field + ']');
         if (input) {
           input.value = values[field];
         }

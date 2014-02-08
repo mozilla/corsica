@@ -42,7 +42,7 @@ h1, h2, h3, h4, h5, h6 {
 .plugin header {
   background: #444;
   color: #fff;
-  padding: 10px 20px;
+  padding: 1em;
   margin: -1em -1em 1em -1em;
 }
 .plugin {
@@ -69,7 +69,7 @@ h1, h2, h3, h4, h5, h6 {
   border: 0;
 }
 .plugin .many, .plugin .row > input {
-  vertical-align: middle;
+  vertical-align: top;
   display: inline-block;
   width: calc(100% - 128px);
   position: relative;
@@ -87,8 +87,20 @@ h1, h2, h3, h4, h5, h6 {
 .plugin label {
   width: 128px;
   display: inline-block;
-  padding-right: 1em;
+  padding: .5em 1em;
   text-align: right;
+}
+.plugin button {
+  font-size: 1rem;
+  padding: .5em 1em;
+  border: 0;
+  background: #5EB95E;
+  color: #fff;
+  float: right;
+}
+.plugin button::-moz-focus-inner {
+  border: 0;
+  padding: 0;
 }
 
 @media screen and (max-width: 800px) {
