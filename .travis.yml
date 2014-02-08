@@ -5,5 +5,11 @@ node_js:
 branches:
   only:
     - master
+install:
+    - npm install
+    - npm install jshint
+script:
+    - jshint .
+    - npm test
 notifications:
   email: false

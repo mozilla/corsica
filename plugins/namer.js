@@ -1,5 +1,5 @@
 /* Description:
- *   Give names to functions.
+ *   Give names to clients.
  *
  * Dependencies:
  *   None

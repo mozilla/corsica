@@ -2,29 +2,31 @@
  *   pushes a default URL to screens when /reset is hit
  *
  * Dependencies:
- *   None
+ *   settings
  *
  * Configuration:
- *   default_url
+ *   defaultUrl
  *
  * Author:
  *    lonnen, mythmon, potch
  */
 
-var DEFAULT_URL = '/default.html';
-
 module.exports = function (corsica) {
   var settings = corsica.settings.setup('reset', {
-    defaultUrl: 'String',
-  }, {
-    defaultUrl: '/default.html',
-  });
+      defaultUrl: '[String]',
+    }, {
+      defaultUrl: ['/default.html', 'http://xkcd.com'],
+    });
 
   corsica.on('reset', function (content) {
+  var urlIndex = 0;
+
+  corsica.on('reset', function(content) {
     return settings.get()
       .then(function (settings) {
         content.type = 'url';
-        content.url = settings.defaultUrl;
+        content.url = settings.defaultUrl[urlIndex];
+        urlIndex = (urlIndex + 1) % settings.defaultUrl.length;
         corsica.sendMessage('content', content);
         return content;
       });

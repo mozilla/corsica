@@ -49,20 +49,19 @@ function setup(name, spec, defaults) {
     corsica.brain.get(key)
       .then(function(settings) {
         settings = settings || {};
-        for (var k in defaults) {
-          if (!(k in settings)) {
-            settings[k] = defaults[k];
-          }
-        }
         resolve(corsica.brain.set(key, settings));
       });
   });
 
   return {
     get: function() {
-      return setupDeferred.then(function() {
-        return corsica.brain.get(key);
-      });
+      return setupDeferred
+        .then(function() {
+          return corsica.brain.get(key);
+        })
+        .then(function(settings) {
+          return corsica.utils.merge(defaults, settings);
+        });
     },
     set: function(value) {
       return setupDeferred.then(function() {
