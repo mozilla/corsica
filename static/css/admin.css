@@ -1,0 +1,121 @@
+
+* {
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+}
+
+body, html {
+  height: 100%;
+}
+
+body {
+  font-family: sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+}
+
+.brand {
+  padding-left: 38px;
+  background: url(../img/logo-mono.svg) left center no-repeat;
+  background-size: auto 32px;
+  float: left;
+  height: 32px;
+  line-height: 36px;
+  font-weight: normal;
+}
+
+.topbar {
+  background: #444;
+  color: #fff;
+  overflow: hidden;
+  padding: 10px 20px;
+}
+
+.settings {
+  overflow: hidden;
+  padding: 1em;
+}
+.plugin header {
+  background: #444;
+  color: #fff;
+  padding: 1em;
+  margin: -1em -1em 1em -1em;
+}
+.plugin {
+  background: #ddd;
+  padding: 1em;
+  width: calc(50% - .5em);
+  float: left;
+  margin-bottom: 1em;
+}
+.plugin:nth-child(2n) {
+  margin-left: 1em;
+}
+
+.plugin .row {
+  position: relative;
+  margin-top: 1em;
+}
+.plugin .row:first-child {
+  margin-top: 0;
+}
+.plugin input {
+  font-size: 1rem;
+  padding: .5em;
+  border: 0;
+}
+.plugin .many, .plugin .row > input {
+  vertical-align: top;
+  display: inline-block;
+  width: calc(100% - 128px);
+  position: relative;
+}
+.plugin .many input {
+  font-size: 1rem;
+  display: block;
+  width: 100%;
+  padding: .5em;
+  margin-top: 1em;
+}
+.plugin .many input:first-child {
+  margin-top: 0;
+}
+.plugin label {
+  width: 128px;
+  display: inline-block;
+  padding: .5em 1em;
+  text-align: right;
+}
+.plugin button {
+  font-size: 1rem;
+  padding: .5em 1em;
+  border: 0;
+  background: #5EB95E;
+  color: #fff;
+  float: right;
+}
+.plugin button::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+
+@media screen and (max-width: 800px) {
+  .plugin {
+    width: 100%;
+  }
+  .plugin label {
+    text-align: left;
+    margin-bottom: .5em;
+  }
+  .plugin input {
+    display: block;
+    width: 100%;
+  }
+  .plugin:nth-child(2n) {
+    margin-left: 0;
+  }
+}

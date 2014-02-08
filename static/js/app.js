@@ -1,8 +1,11 @@
-console.log('Welcome to Corsica.');
-console.log('To the NORTH there is water.');
-console.log('To the WEST there is water.');
-console.log('To the EAST there is water.');
-console.log('To the SOUTH there is water.');
+
+console.log(
+  'Welcome to Corsica.\n'+
+  'To the NORTH there is water.\n'+
+  'To the WEST there is water.\n'+
+  'To the EAST there is water.\n'+
+  'To the SOUTH there is water.'
+);
 
 var config;
 try {
@@ -67,20 +70,17 @@ function handleHTML(html) {
 
 function init() {
   console.log('My name is ' + config.name);
-  sendMesssage('init', {name: config.name});
+  sendMessage('init', {name: config.name});
 }
 
 console.log('Waiting for connection to server...');
-
-/* Socket.IO connections */
-var socket = io.connect('/');
 
 socket.on('connect', function() {
   console.log('Connection to server established.');
 
   if (config.name === undefined) {
     console.log('getting a name');
-    sendMesssage('getName').then(function(name) {
+    sendMessage('getName').then(function(name) {
       config.name = name;
       writeConfig();
       init();
@@ -117,40 +117,3 @@ socket.on('disconnect', function() {
   console.log('Disconnected from server.');
 });
 
-
-var sendMesssage = (function() {
-  var messageReciepts = {};
-  var nextId = 0;
-
-  function sendMesssage(name, message) {
-    return new Promise(function(resolve, reject) {
-      var clientId = nextId++;
-      messageReciepts[clientId] = {resolve: resolve, reject: reject};
-      socket.emit('msg', {
-        clientId: clientId,
-        name: name,
-        message: message,
-      });
-    });
-  }
-
-  socket.on('resolve', function(data) {
-    var clientId = data.clientId;
-    var message = data.message;
-    messageReciepts[clientId].resolve(message);
-  });
-
-  socket.on('reject', function(data) {
-    var clientId = data.clientId;
-    var message = data.message;
-    messageReciepts[clientId].reject(message);
-  });
-
-  return sendMesssage;
-})();
-
-var messagePromises = {};
-
-function sendMesssage(name, message) {
-  socket.emit('message', {name: name, message: message});
-}

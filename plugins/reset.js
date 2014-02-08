@@ -8,21 +8,19 @@
  *   defaultUrl
  *
  * Author:
- *    lonnen, mythmon
+ *    lonnen, mythmon, potch
  */
 
 module.exports = function (corsica) {
   var settings = corsica.settings.setup('reset', {
-      defaultUrl: '[String]',
-    }, {
-      defaultUrl: ['/default.html', 'http://xkcd.com'],
-    });
+    defaultUrl: ['/default.html', 'http://xkcd.com', 'http://potch.me'],
+  });
 
   var urlIndex = 0;
 
   corsica.on('reset', function(content) {
     return settings.get()
-      .then(function(settings) {
+      .then(function (settings) {
         content.type = 'url';
         content.url = settings.defaultUrl[urlIndex];
         urlIndex = (urlIndex + 1) % settings.defaultUrl.length;

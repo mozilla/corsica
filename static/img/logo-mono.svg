@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <clipPath id="clip1">
+      <path transform="translate(50,50) rotate(55) translate(-54,-50)"
+            d="M 0,0 L50,0 50,100 0,100"/>
+    </clipPath>
+    <clipPath id="clip2">
+      <path transform="translate(50,50) rotate(55) translate(-46,-50)"
+            d="M 100,0 L50,0 50,100 100,100"/>
+    </clipPath>
+  </defs>
+  <g transform="translate(50,50) rotate(-45) translate(-50,-50)">
+    <path fill="#fff" clip-path="url(#clip1)" d="M100,50
+             A50,50 0 1 0 50,100
+             L50,80
+             A30,30 0 1 1 80,50
+             L80,50 z"/>
+    <path fill="#fff" clip-path="url(#clip2)" d="M100,50
+             A50,50 0 1 0 50,100
+             L50,80
+             A30,30 0 1 1 80,50
+             L80,50 z"/>
+  </g>
+  <g transform="translate(50,50) scale(1.4) rotate(11) translate(-50,-50)">
+    <path fill="#fff" d="M50,30 L40,55 52,52 50,70 60,45 48,48 z"/>
+  </g>
+</svg>
