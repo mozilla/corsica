@@ -5,5 +5,6 @@ framework:
 mem: 128
 processes:
     web: npm start
+ignores: ["node_modules"]
 services:
   filesystem-corsica: filesystem
