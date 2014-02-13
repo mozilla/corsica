@@ -49,11 +49,11 @@ function payAttention(name) {
 var contentEl = document.querySelector('#content');
 
 function handleURL(url) {
-  contentEl.innerHTML = '';
   var iframe = makeEl('iframe', null, {
     sandbox: 'allow-same-origin allow-scripts allow-forms',
     src: url
   });
+  contentEl.innerHTML = '';
   contentEl.appendChild(iframe);
 }
 
