@@ -12,9 +12,11 @@ var path = require('path');
 
 var Promise = require('es6-promise').Promise;
 
+var staticPath = path.resolve(path.join(path.dirname(__filename), '..', 'static'));
+
 
 module.exports = function(corsica) {
-  var namesPath = path.join(corsica.dirname, 'static/names.txt');
+  var namesPath = path.join(staticPath, 'names.txt');
   var names = new Promise(function(resolve, reject) {
     fs.readFile(namesPath, {encoding: 'utf-8'}, function(err, data) {
       if (err) {
