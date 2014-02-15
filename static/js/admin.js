@@ -105,11 +105,13 @@ function createSection(name, spec) {
         }
       }
       console.log('updating ' + name + '...');
+      section.classList.add('pending');
       sendMessage('settings.set', {
           'plugin': name,
           'settings': obj
         }).then(function () {
-        console.log(name + ' updated.');
+          section.classList.remove('pending');
+          console.log(name + ' updated.');
       });
     });
 
