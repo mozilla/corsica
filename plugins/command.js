@@ -22,16 +22,13 @@ var url = require('url');
 
 module.exports = function(corsica) {
 
-  corsica.on('command', function(args) {
+  corsica.on('command', function(msg) {
 
-    var tokens = parser(args.raw);
+    var tokens = parser(msg.raw);
     var msgType = tokens[0];
     var parsedUrl = url.parse(tokens[0]);
 
-    var msg = {
-      raw: args.raw,
-      _args: [],
-    };
+    msg._args = [];
     tokens.slice(1).forEach(function(token) {
       if (token.indexOf('=') > -1) {
         var parts = token.split('=');
@@ -48,13 +45,9 @@ module.exports = function(corsica) {
       msgType = 'content';
     }
 
-    return corsica.sendMessage(msgType, msg)
-      .then(function (msg) {
-        if (msg.response) {
-          args._response = msg._response;
-        }
-        return args;
-      });
+    console.log(msgType, msg);
+
+    return corsica.sendMessage(msgType, msg);
   });
 };
 
