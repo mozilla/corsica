@@ -1,4 +1,3 @@
-
 console.log('Waiting for connection to server...');
 
 socket.on('connect', function () {
@@ -7,6 +6,10 @@ socket.on('connect', function () {
 
 socket.on('disconnect', function () {
   console.log('Disconnected from server.');
+});
+
+socket.on('settings.set', function(opts) {
+  updateUI(opts.plugin, opts.settings);
 });
 
 var settingsEl = document.querySelector('.settings');
@@ -104,14 +107,12 @@ function createSection(name, spec) {
           }
         }
       }
-      console.log('updating ' + name + '...');
       section.classList.add('pending');
       sendMessage('settings.set', {
           'plugin': name,
           'settings': obj
         }).then(function () {
           section.classList.remove('pending');
-          console.log(name + ' updated.');
       });
     });
 
@@ -147,38 +148,43 @@ function createSection(name, spec) {
   }
 
   sendMessage('settings.get', name).then(function (values) {
-    var form = section.querySelector('form'),
-        input;
+    updateUI(name, values);
+  });
+}
 
-    for (var field in values) {
-      var val = values[field];
-      if (val instanceof Array) {
-        var many = form.querySelector('[data-many=' + field + ']');
-        var inputs = many.querySelectorAll('input:not(.empty)');
-        for (var i = 0; i < Math.max(val.length, inputs.length); i++) {
-          input = inputs[i];
-          var v = val[i];
-          if (v !== undefined && input) {
-            input.value = v;
-          } else if (v !== undefined && !input) {
-            input = makeEl('input', null, {
-              'value': val[i]
-            });
-            many.insertBefore(input, many.querySelector('.empty'));
-          } else if (v === undefined && input) {
-            input.parentNode.removeChild(input);
-          }
+function updateUI(plugin, values) {
+  console.log('updateUI', plugin, values);
+  var form = document.querySelector('section#settings-' + plugin + ' form'),
+      input;
+
+  for (var field in values) {
+    var val = values[field];
+    if (val instanceof Array) {
+      var many = form.querySelector('[data-many=' + field + ']');
+      var inputs = many.querySelectorAll('input:not(.empty)');
+      for (var i = 0; i < Math.max(val.length, inputs.length); i++) {
+        input = inputs[i];
+        var v = val[i];
+        if (v !== undefined && input) {
+          input.value = v;
+        } else if (v !== undefined && !input) {
+          input = makeEl('input', null, {
+            'value': val[i]
+          });
+          many.insertBefore(input, many.querySelector('.empty'));
+        } else if (v === undefined && input) {
+          input.parentNode.removeChild(input);
         }
-      } else {
-        input = form.querySelector('[name=' + field + ']');
-        if (input) {
-          if (val === true || val === false) {
-            input.checked = val;
-          } else {
-            input.value = val;
-          }
+      }
+    } else {
+      input = form.querySelector('[name=' + field + ']');
+      if (input) {
+        if (val === true || val === false) {
+          input.checked = val;
+        } else {
+          input.value = val;
         }
       }
     }
-  });
+  }
 }

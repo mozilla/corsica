@@ -1,6 +1,5 @@
 {
     "asi": false,
-    "browser": true,
     "eqeqeq": true,
     "evil": false,
     "loopfunc": false,

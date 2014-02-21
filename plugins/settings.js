@@ -84,7 +84,6 @@ module.exports = function (corsica_) {
   };
 
   corsica.on('settings.getSpecs', function () {
-    console.log('asked for setting');
     return new Promise(function (resolve) {
       resolve(specs);
     });
@@ -97,10 +96,12 @@ module.exports = function (corsica_) {
   });
 
   corsica.on('settings.set', function (opts) {
+    console.log('settings.set', opts);
     var plugin = opts.plugin;
     var values = opts.settings;
     return corsica.brain.set('settings::' + plugin, values).then(function () {
       emitters[plugin].emit('updated', values);
+      return opts;
     });
   });
 

@@ -1,4 +1,6 @@
 {
+    "browser": true,
+    
     "globals": {
         "URL": false,
         "socket": false,
