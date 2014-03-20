@@ -209,11 +209,11 @@ function updateCurrentClients() {
   .then(function(message) {
     var text;
     if (message.count === 0) {
-      text = 'No clients connected.';
+      text = 'No clients';
     } else if (message.count === 1) {
-      text = '1 client connected.';
+      text = '1 client';
     } else {
-      text = message.count + ' clients connected.';
+      text = message.count + ' clients';
     }
     el.textContent = text;
   });
