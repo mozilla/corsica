@@ -28,6 +28,7 @@ h1, h2, h3, h4, h5, h6 {
   height: 32px;
   line-height: 29px;
   font-weight: normal;
+  flex-grow: 1;
 }
 
 .topbar {
@@ -35,6 +36,7 @@ h1, h2, h3, h4, h5, h6 {
   color: #fff;
   overflow: hidden;
   padding: 10px 20px;
+  display: flex;
 }
 
 .settings {
@@ -125,6 +127,14 @@ h1, h2, h3, h4, h5, h6 {
 .plugin button::-moz-focus-inner {
   border: 0;
   padding: 0;
+}
+
+.stats {
+  position: relative;
+  margin: 0;
+  padding: 6px 0 0;
+  list-style: none;
+  flex-grow: 0;
 }
 
 @media screen and (max-width: 800px) {

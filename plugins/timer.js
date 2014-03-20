@@ -21,13 +21,18 @@ module.exports = function (corsica) {
   var clientCounters = {};
   var utils = corsica.utils;
 
-  corsica.on('init', function (data) {
+  corsica.on('population.connected', function (data) {
     var name = data.name;
     if (name === undefined) {
       return;
     }
     makeTimeout(name);
     return data;
+  });
+
+  corsica.on('population.disconnected', function (data) {
+    // Invalidate the timer.
+    clientCounters[data.name]++;
   });
 
   function makeTimeout(name) {
@@ -52,6 +57,7 @@ module.exports = function (corsica) {
         }
         makeTimeout(name);
         corsica.sendMessage('reset', {'screen': name});
+        console.log('[timer]', 'reset', name);
       })
       .catch(function (err) {
         console.error('Error:', err);

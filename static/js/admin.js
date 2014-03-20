@@ -12,11 +12,15 @@ socket.on('settings.set', function(opts) {
   updateUI(opts.plugin, opts.settings);
 });
 
+socket.on('census.connected', updateCurrentClients);
+socket.on('census.disconnected', updateCurrentClients);
+
 var settingsEl = document.querySelector('.settings');
 
 function init() {
   console.log('Connection to server established.');
-  sendMessage('settings.getSpecs').then(function (specs) {
+  sendMessage('settings.getSpecs').then(function (message) {
+    var specs = message.specs;
     var plugin;
     for (plugin in specs) {
       createSection(plugin, specs[plugin]);
@@ -29,6 +33,7 @@ function init() {
       }
     }
   });
+  updateCurrentClients();
 }
 
 function createSection(name, spec) {
@@ -147,8 +152,9 @@ function createSection(name, spec) {
     settingsEl.appendChild(section);
   }
 
-  sendMessage('settings.get', name).then(function (values) {
-    updateUI(name, values);
+  console.log('sending message.get with plugin =', name);
+  sendMessage('settings.get', {plugin: name}).then(function (message) {
+    updateUI(name, message.settings);
   });
 }
 
@@ -187,4 +193,28 @@ function updateUI(plugin, values) {
       }
     }
   }
+}
+
+function updateCurrentClients() {
+  var el = document.querySelector('.topbar .stats .current-clients');
+  console.log('updateCurrentClients');
+
+  if (el === null) {
+    console.log('making element');
+    el = makeEl('li.current-clients');
+    document.querySelector('.topbar .stats').appendChild(el);
+  }
+
+  sendMessage('census.count')
+  .then(function(message) {
+    var text;
+    if (message.count === 0) {
+      text = 'No clients connected.';
+    } else if (message.count === 1) {
+      text = '1 client connected.';
+    } else {
+      text = message.count + ' clients connected.';
+    }
+    el.textContent = text;
+  });
 }

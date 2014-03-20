@@ -83,25 +83,24 @@ module.exports = function (corsica_) {
     setup: setup,
   };
 
-  corsica.on('settings.getSpecs', function () {
-    return new Promise(function (resolve) {
-      resolve(specs);
+  corsica.on('settings.getSpecs', function (message) {
+    message.specs = specs;
+    return message;
+  });
+
+  corsica.on('settings.get', function (message) {
+    return corsica.brain.get('settings::' + message.plugin).then(function (settings) {
+      message.settings = corsica.utils.merge(specs[message.plugin], settings);
+      return message;
     });
   });
 
-  corsica.on('settings.get', function (plugin) {
-    return corsica.brain.get('settings::' + plugin).then(function (settings) {
-      return corsica.utils.merge(specs[plugin], settings);
-    });
-  });
-
-  corsica.on('settings.set', function (opts) {
-    console.log('settings.set', opts);
-    var plugin = opts.plugin;
-    var values = opts.settings;
+  corsica.on('settings.set', function (message) {
+    var plugin = message.plugin;
+    var values = message.settings;
     return corsica.brain.set('settings::' + plugin, values).then(function () {
       emitters[plugin].emit('updated', values);
-      return opts;
+      return message;
     });
   });
 
