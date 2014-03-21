@@ -1,4 +1,3 @@
-
 console.log(
   'Welcome to Corsica.\n'+
   'To the NORTH there is water.\n'+
@@ -73,22 +72,30 @@ function init() {
   sendMessage('init', {name: config.name});
 }
 
+function randomName() {
+  return ('00000000' + Math.random().toString(36)).slice(-8);
+}
+
 console.log('Waiting for connection to server...');
 
 socket.on('connect', function() {
   console.log('Connection to server established.');
 
   if (config.name === undefined) {
-    console.log('getting a name');
-    sendMessage('getName').then(function(message) {
-      config.name = message.name;
-      console.log(message);
-      writeConfig();
-      init();
-    });
-  } else {
-    init();
+    console.log('inventing a name');
+    config.name = 'tmp-' + randomName();
+    writeConfig();
   }
+  init();
+});
+
+socket.on('rename', function(msg) {
+  if (!msg.name) {
+    console.warn('A whisper in the dark announces ΟΥΤΙΣ');
+    return
+  }
+  config.name = msg.name;
+  console.log('My name is ' + config.name);
 });
 
 socket.on('content', function(msg) {
