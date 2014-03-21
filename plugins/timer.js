@@ -16,21 +16,28 @@ var Promise = require('es6-promise').Promise;
 module.exports = function (corsica) {
   var settings = corsica.settings.setup('timer', {
     resetTime: 2 * 60 * 1000,
+    resetOnConnect: true,
   });
 
   var clientCounters = {};
   var utils = corsica.utils;
 
-  corsica.on('population.connected', function (data) {
+  corsica.on('census.connected', function (data) {
     var name = data.name;
     if (name === undefined) {
       return;
     }
     makeTimeout(name);
+    settings.get()
+      .then(function(settings) {
+        if (settings.resetOnConnect) {
+          corsica.sendMessage('reset', {screen: name});
+        }
+      });
     return data;
   });
 
-  corsica.on('population.disconnected', function (data) {
+  corsica.on('census.disconnected', function (data) {
     // Invalidate the timer.
     clientCounters[data.name]++;
   });
