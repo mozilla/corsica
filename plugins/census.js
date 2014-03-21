@@ -48,6 +48,7 @@ module.exports = function (corsica) {
 
   corsica.on('census.clients', function(message) {
     message.clients = clientNames();
+    message.count = message.clients.length;
     return message;
   });
 

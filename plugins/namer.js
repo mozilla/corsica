@@ -31,15 +31,17 @@ module.exports = function(corsica) {
     });
   });
 
-  corsica.on('getName', function(content) {
+  corsica.on('getName', function(message) {
     console.log('getName');
     return names.then(
       function(names) {
         var i = Math.floor(Math.random() * names.length);
-        return names[i];
+        message.name = names[i];
+        return message;
       },
       function(err) {
-        return corsica.utils.randomId();
+        message.name = corsica.utils.randomId();
+        return message;
       });
   });
 };

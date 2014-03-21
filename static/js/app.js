@@ -80,8 +80,9 @@ socket.on('connect', function() {
 
   if (config.name === undefined) {
     console.log('getting a name');
-    sendMessage('getName').then(function(name) {
-      config.name = name;
+    sendMessage('getName').then(function(message) {
+      config.name = message.name;
+      console.log(message);
       writeConfig();
       init();
     });

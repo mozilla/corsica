@@ -25,7 +25,7 @@ function init() {
     for (plugin in specs) {
       createSection(plugin, specs[plugin]);
     }
-    var sections = document.querySelectorAll('section.plugin');
+    var sections = document.querySelectorAll('.settings section.plugin');
     for (var i = 0; i < sections.length; i++) {
       plugin = sections[i].getAttribute('data-plugin');
       if (!(plugin in specs)) {
@@ -33,6 +33,7 @@ function init() {
       }
     }
   });
+  initCommandAndControl();
   updateCurrentClients();
 }
 
@@ -195,26 +196,66 @@ function updateUI(plugin, values) {
   }
 }
 
-function updateCurrentClients() {
-  var el = document.querySelector('.topbar .stats .current-clients');
-  console.log('updateCurrentClients');
+function initCommandAndControl() {
+  var cnc = document.querySelector('.cnc section.plugin');
+  if (cnc === null) {
+    cnc = makeEl('section.plugin');
+    cnc.appendChild(makeEl('header', 'send message'));
+    var form = makeEl('form');
+    var row = makeEl('div.row');
+    row.appendChild(makeEl('select.clients'));
+    row.appendChild(makeEl('input.command', null, {type: 'text'}));
+    row.appendChild(makeEl('button.send', 'send'));
+    form.appendChild(row);
 
-  if (el === null) {
-    console.log('making element');
-    el = makeEl('li.current-clients');
-    document.querySelector('.topbar .stats').appendChild(el);
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      cnc.classList.add('pending');
+      var command = form.querySelector('input.command').value;
+      var screen = form.querySelector('select.clients').value;
+      if (command.indexOf('screen=') === -1) {
+        command += ' screen=' + screen;
+      }
+      sendMessage('command', {'raw': command})
+        .then(function () {
+          cnc.classList.remove('pending');
+        });
+    });
+
+    cnc.appendChild(form);
+    document.querySelector('.cnc').appendChild(cnc);
+
+
+  }
+}
+
+function updateCurrentClients() {
+  var clientCounter = document.querySelector('.topbar .stats .current-clients');
+  var clientSelector = document.querySelector('.cnc select.clients');
+
+  if (clientCounter === null) {
+    clientCounter = makeEl('li.current-clients');
+    document.querySelector('.topbar .stats').appendChild(clientCounter);
   }
 
-  sendMessage('census.count')
+  sendMessage('census.clients')
   .then(function(message) {
-    var text;
-    if (message.count === 0) {
-      text = 'No clients';
-    } else if (message.count === 1) {
-      text = '1 client';
-    } else {
-      text = message.count + ' clients';
+    var count = message.count;
+    var clients = message.clients;
+    clientCounter.textContent = (count || 'No') + (count === 1 ? ' client' : ' clients');
+    clients.sort();
+    var selectedClient = clientSelector.value;
+    var options = clientSelector.querySelectorAll('option');
+    for (var i = 0; i < options.length; i++) {
+      clientSelector.remove(options[i]);
     }
-    el.textContent = text;
+
+    clients.forEach(function(client) {
+      var newOpt = makeEl('option', client, {
+        value: client,
+        selected: client === selectedClient,
+      });
+      clientSelector.appendChild(newOpt);
+    });
   });
 }
