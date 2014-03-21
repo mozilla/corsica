@@ -90,12 +90,17 @@ socket.on('connect', function() {
 });
 
 socket.on('rename', function(msg) {
+  if (!payAttention(msg.screen)) {
+    console.log('You receive a message, but it\'s not for you...');
+    return;
+  }
   if (!msg.name) {
     console.warn('A whisper in the dark announces ΟΥΤΙΣ');
-    return
+    return;
   }
   config.name = msg.name;
   console.log('My name is ' + config.name);
+  writeConfig();
 });
 
 socket.on('content', function(msg) {
