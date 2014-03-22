@@ -137,6 +137,18 @@ article > section {
   flex-grow: 0;
 }
 
+.logs ul li .top .expander {
+  cursor: pointer;
+}
+
+.logs ul li pre {
+  display: none;
+}
+
+.logs ul li.expanded pre {
+  display: block;
+}
+
 @media screen and (max-width: 800px) {
   .plugin {
     width: 100%;

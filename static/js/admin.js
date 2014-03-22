@@ -15,6 +15,8 @@ socket.on('settings.set', function(opts) {
 socket.on('census.connected', updateCurrentClients);
 socket.on('census.disconnected', updateCurrentClients);
 
+socket.onAnyMessage(addLogMessage);
+
 var settingsEl = document.querySelector('.settings');
 
 function init() {
@@ -197,10 +199,12 @@ function updateUI(plugin, values) {
 }
 
 function initCommandAndControl() {
-  var cnc = document.querySelector('.cnc section.plugin');
-  if (cnc === null) {
-    cnc = makeEl('section.plugin');
-    cnc.appendChild(makeEl('header', 'send message'));
+  var controlsEl = document.querySelector('.controls');
+
+  var cncEl = controlsEl.querySelector('.cnc');
+  if (cncEl === null) {
+    cncEl = makeEl('section.plugin.cnc');
+    cncEl.appendChild(makeEl('header', 'send message'));
     var form = makeEl('form');
     var row = makeEl('div.row');
     row.appendChild(makeEl('select.clients'));
@@ -210,7 +214,7 @@ function initCommandAndControl() {
 
     form.addEventListener('submit', function (e) {
       e.preventDefault();
-      cnc.classList.add('pending');
+      cncEl.classList.add('pending');
       var command = form.querySelector('input.command').value;
       var screen = form.querySelector('select.clients').value;
       if (command.indexOf('screen=') === -1) {
@@ -218,20 +222,33 @@ function initCommandAndControl() {
       }
       sendMessage('command', {'raw': command})
         .then(function () {
-          cnc.classList.remove('pending');
+          cncEl.classList.remove('pending');
         });
     });
 
-    cnc.appendChild(form);
-    document.querySelector('.cnc').appendChild(cnc);
+    cncEl.appendChild(form);
+    controlsEl.appendChild(cncEl);
+  }
 
+  var logsEl = controlsEl.querySelector('.logs');
+  if (logsEl === null) {
+    logsEl = makeEl('section.plugin.logs');
+    logsEl.appendChild(makeEl('header', 'message logs'));
+    logsEl.appendChild(makeEl('ul'));
 
+    logsEl.addEventListener('click', function(e) {
+      if (e.originalTarget.classList.contains('expander')) {
+        e.originalTarget.parentNode.parentNode.classList.toggle('expanded');
+      }
+    });
+
+    controlsEl.appendChild(logsEl);
   }
 }
 
 function updateCurrentClients() {
   var clientCounter = document.querySelector('.topbar .stats .current-clients');
-  var clientSelector = document.querySelector('.cnc select.clients');
+  var clientSelector = document.querySelector('.controls .cnc select.clients');
 
   if (clientCounter === null) {
     clientCounter = makeEl('li.current-clients');
@@ -258,4 +275,28 @@ function updateCurrentClients() {
       clientSelector.appendChild(newOpt);
     });
   });
+}
+
+function addLogMessage(name, message) {
+  if (name === 'resolve') {
+    return;
+  }
+  var logsEl = document.querySelector('.controls .logs ul');
+  if (logsEl) {
+    var li = makeEl('li');
+    var top = makeEl('div.top');
+    var now = new Date();
+
+    top.appendChild(makeEl('time', now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds() + ' '));
+    top.appendChild(makeEl('span.name', name + ' '));
+    if (message) {
+      top.appendChild(makeEl('span.expander', '{...}'));
+      li.appendChild(makeEl('pre', JSON.stringify(message, null, '  ')));
+    }
+    li.insertBefore(top, li.firstChild);
+    logsEl.insertBefore(li, logsEl.firstChild);
+    while (logsEl.childNodes.length > 10) {
+      logsEl.removeChild(logsEl.lastChild);
+    }
+  }
 }
