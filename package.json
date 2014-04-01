@@ -21,6 +21,7 @@
     "socket.io": "~0.9.16",
     "es6-promise": "~0.1.1",
     "express": "~3.4.8",
-    "request": "^2.34.0"
+    "request": "^2.34.0",
+    "minimatch": "^0.2.14"
   }
 }
