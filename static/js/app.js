@@ -71,6 +71,7 @@ function handleHTML(html) {
 function init() {
   console.log('My name is ' + config.name);
   sendMessage('init', {name: config.name});
+  setupFullscreen();
 }
 
 console.log('Waiting for connection to server...');
@@ -118,3 +119,22 @@ socket.on('disconnect', function() {
   console.log('Disconnected from server.');
 });
 
+function setupFullscreen() {
+  function requestFullscreen(elem) {
+    (elem.requestFullscreen ||
+     elem.mozRequestFullScreen ||
+     elem.webkitRequestFullScreen).call(elem, Element.ALLOW_KEYBOARD_INPUT);
+  }
+
+  var contentElem = document.querySelector('#content');
+
+  // Be optimistic, this might work.
+  requestFullscreen(contentElem);
+
+  $(document).on('keydown', function(e) {
+    // 70 is "f"
+    if (e.keyCode === 70) {
+      requestFullscreen(contentElem);
+    }
+  });
+}
