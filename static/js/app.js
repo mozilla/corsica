@@ -131,7 +131,7 @@ function setupFullscreen() {
   // Be optimistic, this might work.
   requestFullscreen(contentElem);
 
-  $(document).on('keydown', function(e) {
+  document.addEventListener('keydown', function (e) {
     // 70 is "f"
     if (e.keyCode === 70) {
       requestFullscreen(contentElem);
