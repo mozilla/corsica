@@ -47,11 +47,13 @@ module.exports = function(corsica) {
 
     console.log('command sending', msgType, msg);
 
-    return corsica.sendMessage(msgType, msg);
+    corsica.sendMessage(msgType, msg);
+    return msg;
   });
 };
 
 
+/* Parse space separated tokens, allowing for both quotes and escaping quotes. */
 function parser(str) {
   var tokens = [];
   var quotes = false;
