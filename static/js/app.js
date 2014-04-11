@@ -46,6 +46,21 @@ function payAttention(name) {
   return config.name === name;
 }
 
+function identify() {
+  toast('I am ' + config.name, 10000);
+}
+
+var toastTimeout;
+var toastEl = document.querySelector('#toast');
+function toast(message, timeout) {
+  toastEl.textContent = message;
+  toastEl.classList.add('show');
+  toastTimeout = setTimeout(untoast, timeout || 5000);
+}
+function untoast() {
+  toastEl.classList.remove('show');
+}
+
 var contentEl = document.querySelector('#content');
 
 function handleURL(url) {
@@ -108,6 +123,12 @@ socket.on('content', function(msg) {
       break;
     case 'html':
       handleHTML(msg.content);
+      break;
+    case 'identify':
+      identify();
+      break;
+    case 'toast':
+      toast(msg.text);
       break;
     default:
       console.log('A voice speaks, in an unintelligible language.');

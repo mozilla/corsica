@@ -13,6 +13,8 @@ body, html {
 body {
   background: url(../img/logo.svg) center no-repeat;
   background-size: auto 80%;
+  overflow: hidden;
+  max-height: 100%;
 }
 
 #content {
@@ -29,4 +31,26 @@ body {
   height: 100%;
   border: 0;
   background: #fff;
+}
+
+#toast {
+  font-size: 6vh;
+  background: rgba(0,0,0,.8);
+  color: #fff;
+  font-family: sans-serif;
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translate(-50%, 100vh);
+  padding: 3vh 6vh;
+  border-radius: 3vh;
+  opacity: 0;
+  transition-property: transform, opacity;
+  transition-duration: .3s, .3s;
+  transition-timing-function: ease-out, ease-out;
+}
+
+#toast.show {
+  transform: translate(-50%, 80vh);
+  opacity: 1;
 }
