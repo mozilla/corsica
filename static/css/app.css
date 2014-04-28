@@ -26,6 +26,42 @@ body {
   overflow: hidden;
 }
 
+#app {
+  cursor: none;
+}
+
+.show-hud #app {
+  cursor: inherit;
+}
+
+#hud {
+  opacity: 0;
+  transition: .4s opacity ease-out;
+  position: absolute;
+  bottom: 4vh;
+  right: 4vh;
+  text-align: right;
+}
+#hud button {
+  cursor: none;
+}
+
+button {
+  font-size: 3vh;
+  border: 0;
+  padding: .5em 1em;
+  background: #000;
+  color: #fff;
+  border-radius: 1vh;
+}
+
+.show-hud #hud {
+  opacity: 1;
+}
+.show-hud #hud button {
+  cursor: pointer;
+}
+
 #content iframe {
   width: 100%;
   height: 100%;

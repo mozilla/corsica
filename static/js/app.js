@@ -112,6 +112,10 @@ socket.on('admin', function (msg) {
   if (!type) {
     return;
   }
+  if (!payAttention(msg.screen)) {
+    console.log('You receive a message, but it\'s not for you...');
+    return;
+  }
   switch (type) {
     case 'reload':
       window.location.reload();
@@ -148,17 +152,52 @@ socket.on('content', function (msg) {
   }
 });
 
+var hudTimeout;
+document.body.addEventListener('mousemove', function (e) {
+  document.body.classList.add('show-hud');
+  clearTimeout(hudTimeout);
+  hudTimeout = setTimeout(function () {
+    document.body.classList.remove('show-hud');
+  }, 3000);
+});
+
 socket.on('disconnect', function() {
   console.log('Disconnected from server.');
 });
 
-function setupFullscreen() {
-  function requestFullscreen(elem) {
-    (elem.requestFullscreen ||
-     elem.mozRequestFullScreen ||
-     elem.webkitRequestFullScreen).call(elem, Element.ALLOW_KEYBOARD_INPUT);
-  }
 
+function requestFullscreen(elem) {
+  (elem.requestFullscreen ||
+   elem.msRequestFullScreen ||
+   elem.mozRequestFullScreen ||
+   elem.webkitRequestFullScreen ||
+   function(){}).call(elem, Element.ALLOW_KEYBOARD_INPUT);
+}
+
+function cancelFullScreen() {
+  (document.exitFullscreen ||
+   document.msExitFullscreen ||
+   document.mozCancelFullScreen ||
+   document.webkitExitFullscreen ||
+   function(){}).call(document);
+}
+
+function isFullScreen() {
+  return !!(document.fullscreenElement ||
+            document.mozFullScreenElement ||
+            document.webkitFullscreenElement ||
+            document.msFullscreenElement);
+}
+
+function toggleFullScreen(elem) {
+  if (isFullScreen()) {
+    cancelFullScreen();
+  } else {
+    requestFullscreen(elem);
+  }
+}
+
+function setupFullscreen() {
   var contentElem = document.querySelector('#app');
 
   // Be optimistic, this might work.
@@ -167,7 +206,10 @@ function setupFullscreen() {
   document.addEventListener('keydown', function (e) {
     // 70 is "f"
     if (e.keyCode === 70) {
-      requestFullscreen(contentElem);
+      toggleFullScreen(contentElem);
     }
+  });
+  document.querySelector('#fullscreen').addEventListener('click', function (e) {
+    toggleFullScreen(contentElem);
   });
 }
