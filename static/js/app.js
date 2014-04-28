@@ -159,7 +159,7 @@ function setupFullscreen() {
      elem.webkitRequestFullScreen).call(elem, Element.ALLOW_KEYBOARD_INPUT);
   }
 
-  var contentElem = document.querySelector('#content');
+  var contentElem = document.querySelector('#app');
 
   // Be optimistic, this might work.
   requestFullscreen(contentElem);
