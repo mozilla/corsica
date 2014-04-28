@@ -1,6 +1,6 @@
 {
   "name": "corsica",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Ephemeral screens for the masses.",
   "main": "index.js",
   "scripts": {
