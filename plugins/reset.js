@@ -3,10 +3,10 @@
  *
  * Dependencies:
  *   settings
- * 
+ *
  * Optional Dependencies:
  *   command - if present, the reset lines can be commands.
- *   
+ *
  *
  * Configuration:
  *   defaultUrl
@@ -19,7 +19,7 @@ module.exports = function (corsica) {
   var useCommand = corsica.config.plugins.indexOf('command') >= 0;
 
   var settings = corsica.settings.setup('reset', {
-    defaultUrl: ['/default.html', 'http://xkcd.com'],
+    defaultUrl: ['http://xkcd.com'],
   });
 
   var urlIndex = 0;
