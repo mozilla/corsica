@@ -15,7 +15,7 @@ var Promise = require('es6-promise').Promise;
 var Minimatch = require('minimatch').Minimatch;
 
 module.exports = function (corsica) {
-  corsica.on('content', function (message) {
+  corsica.on('*', function (message) {
     // If there is a * or a ? in the screen name, activate globbing.
     // Otherwise, pass it on unmodified.
     if ((message.screen || '').match(/[\*\?\+\|]/)) {

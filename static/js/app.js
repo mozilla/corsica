@@ -123,6 +123,22 @@ socket.on('admin', function (msg) {
   }
 });
 
+socket.on('toast', function (msg) {
+  if (!payAttention(msg.screen)) {
+    console.log('You receive a message, but it\'s not for you...');
+    return;
+  }
+  if (msg.text) {
+    toast(msg.text);
+  }
+});
+
+socket.on('identify', function (msg) {
+  if (payAttention(msg.screen)) {
+    identify();
+  }
+});
+
 socket.on('content', function (msg) {
   var type = msg.type;
   if (!type) {
@@ -139,12 +155,6 @@ socket.on('content', function (msg) {
       break;
     case 'html':
       handleHTML(msg.content);
-      break;
-    case 'identify':
-      identify();
-      break;
-    case 'toast':
-      toast(msg.text);
       break;
     default:
       console.log('A voice speaks, in an unintelligible language.');
