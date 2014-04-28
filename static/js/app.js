@@ -107,7 +107,19 @@ socket.on('connect', function() {
   }
 });
 
-socket.on('content', function(msg) {
+socket.on('admin', function (msg) {
+  var type = msg.type;
+  if (!type) {
+    return;
+  }
+  switch (type) {
+    case 'reload':
+      window.location.reload();
+      break;
+  }
+});
+
+socket.on('content', function (msg) {
   var type = msg.type;
   if (!type) {
     console.warn('You thought you heard something. No, just the waves.');
@@ -117,7 +129,7 @@ socket.on('content', function(msg) {
     console.log('You receive a message, but it\'s not for you...');
     return;
   }
-  switch (msg.type) {
+  switch (type) {
     case 'url':
       handleURL(msg.url);
       break;
