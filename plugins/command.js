@@ -23,6 +23,7 @@ var url = require('url');
 module.exports = function(corsica) {
 
   corsica.on('command', function(msg) {
+    console.log('command', msg);
 
     var tokens = parser(msg.raw);
     var msgType = tokens[0];
