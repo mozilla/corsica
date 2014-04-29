@@ -15,32 +15,37 @@
  *    lonnen, mythmon, potch
  */
 
-module.exports = function (corsica) {
-  var useCommand = corsica.config.plugins.indexOf('command') >= 0;
+module.exports = {
+  requires: ['settings'],
+  after: ['command'],
 
-  var settings = corsica.settings.setup('reset', {
-    defaultUrl: ['http://xkcd.com'],
-  });
+  init: function(corsica) {
+    var useCommand = corsica.config.plugins.indexOf('command') >= 0;
 
-  var urlIndex = 0;
-
-  corsica.on('reset', function(content) {
-    return settings.get()
-    .then(function (settings) {
-      var nextLine = settings.defaultUrl[urlIndex];
-      urlIndex = (urlIndex + 1) % settings.defaultUrl.length;
-
-      if (useCommand) {
-        if ('screen' in content) {
-          nextLine += ' screen=' + content.screen;
-        }
-        corsica.sendMessage('command', {raw: nextLine});
-      } else {
-        content.type = 'url';
-        content.url = nextLine;
-        corsica.sendMessage('content', content);
-      }
-      return content;
+    var settings = corsica.settings.setup('reset', {
+      defaultUrl: ['http://xkcd.com'],
     });
-  });
+
+    var urlIndex = 0;
+
+    corsica.on('reset', function(content) {
+      return settings.get()
+      .then(function (settings) {
+        var nextLine = settings.defaultUrl[urlIndex];
+        urlIndex = (urlIndex + 1) % settings.defaultUrl.length;
+
+        if (useCommand) {
+          if ('screen' in content) {
+            nextLine += ' screen=' + content.screen;
+          }
+          corsica.sendMessage('command', {raw: nextLine});
+        } else {
+          content.type = 'url';
+          content.url = nextLine;
+          corsica.sendMessage('content', content);
+        }
+        return content;
+      });
+    });
+  },
 };

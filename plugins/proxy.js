@@ -11,7 +11,13 @@
 
 var request = require('request');
 
-module.exports = function(corsica) {
-  var proxyUrl = corsica.config.http_proxy || corsica.config.HTTP_PROXY;
-  corsica.request = corsica.request.defaults({'proxy': proxyUrl});
+module.exports = {
+  phase: 0,
+
+  init: function (corsica) {
+    var proxyUrl = corsica.config.http_proxy || corsica.config.HTTP_PROXY;
+    if (proxyUrl) {
+      corsica.request = corsica.request.defaults({'proxy': proxyUrl});
+    }
+  },
 };

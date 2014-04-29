@@ -77,31 +77,35 @@ function setup(name, defaults) {
   return emitter;
 }
 
-module.exports = function (corsica_) {
-  corsica = corsica_;
-  corsica.settings = {
-    setup: setup,
-  };
+module.exports = {
+  requires: ['brain'],
 
-  corsica.on('settings.getSpecs', function (message) {
-    message.specs = specs;
-    return message;
-  });
+  init: function(corsica_) {
+    corsica = corsica_;
+    corsica.settings = {
+      setup: setup,
+    };
 
-  corsica.on('settings.get', function (message) {
-    return corsica.brain.get('settings::' + message.plugin).then(function (settings) {
-      message.settings = corsica.utils.merge(specs[message.plugin], settings);
+    corsica.on('settings.getSpecs', function (message) {
+      message.specs = specs;
       return message;
     });
-  });
 
-  corsica.on('settings.set', function (message) {
-    var plugin = message.plugin;
-    var values = message.settings;
-    return corsica.brain.set('settings::' + plugin, values).then(function () {
-      emitters[plugin].emit('updated', values);
-      return message;
+    corsica.on('settings.get', function (message) {
+      return corsica.brain.get('settings::' + message.plugin).then(function (settings) {
+        message.settings = corsica.utils.merge(specs[message.plugin], settings);
+        return message;
+      });
     });
-  });
+
+    corsica.on('settings.set', function (message) {
+      var plugin = message.plugin;
+      var values = message.settings;
+      return corsica.brain.set('settings::' + plugin, values).then(function () {
+        emitters[plugin].emit('updated', values);
+        return message;
+      });
+    });
+  },
 
 };

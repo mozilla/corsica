@@ -19,6 +19,13 @@
 var Promise = require('es6-promise').Promise;
 var lvl = require('lvl');
 
+module.exports = {
+  phase: 0,
+  init: function(corsica) {
+    corsica.brain = new Brain(corsica);
+  },
+};
+
 function extend() {
   var obj = arguments[0];
   var sources = [];
@@ -56,8 +63,4 @@ Brain.prototype.set = function(key, value) {
 
 Brain.prototype.remove = function(key) {
   return Promise.cast(this.db.putObj(key, null));
-};
-
-module.exports = function(corsica) {
-  corsica.brain = new Brain(corsica);
 };
