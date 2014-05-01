@@ -136,6 +136,11 @@ article > section {
   flex-grow: 0;
 }
 
+.logs ul {
+  max-height: 500px;
+  overflow: auto;
+}
+
 .logs ul li .top .expander {
   cursor: pointer;
 }

@@ -295,7 +295,7 @@ function addLogMessage(name, message) {
     }
     li.insertBefore(top, li.firstChild);
     logsEl.insertBefore(li, logsEl.firstChild);
-    while (logsEl.childNodes.length > 10) {
+    while (logsEl.childNodes.length > 100) {
       logsEl.removeChild(logsEl.lastChild);
     }
   }
