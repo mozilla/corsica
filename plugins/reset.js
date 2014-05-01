@@ -25,8 +25,7 @@ module.exports = function (corsica) {
   var urlIndex = 0;
 
   corsica.on('reset', function(content) {
-    return settings.get()
-    .then(function (settings) {
+    settings.get().then(function (settings) {
       var nextLine = settings.defaultUrl[urlIndex];
       urlIndex = (urlIndex + 1) % settings.defaultUrl.length;
 
@@ -40,7 +39,8 @@ module.exports = function (corsica) {
         content.url = nextLine;
         corsica.sendMessage('content', content);
       }
-      return content;
     });
+
+    return content;
   });
 };

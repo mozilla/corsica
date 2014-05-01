@@ -77,4 +77,25 @@ module.exports = function (corsica) {
     return content;
   });
 
+  corsica.on('timer.stop', function(content) {
+    console.log('stopping timer for', content.screen);
+    var screens = content.screen;
+    if (!(screens instanceof Array)) {
+      screens = [screens];
+    }
+
+    screens.forEach(function(screen) {
+      if (clientCounters[screen]) {
+        clientCounters[screen]++;
+      }
+    });
+
+    return content;
+  });
+
+  corsica.on('timer.start', function(content) {
+    console.log('restarting timer for', content.screen);
+    corsica.sendMessage('reset', {screen: content.screen});
+    return content;
+  });
 };

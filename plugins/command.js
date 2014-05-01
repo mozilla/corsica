@@ -46,8 +46,6 @@ module.exports = function(corsica) {
       msgType = 'content';
     }
 
-    console.log('command sending', msgType, msg);
-
     corsica.sendMessage(msgType, msg);
     return msg;
   });
