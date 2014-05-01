@@ -175,6 +175,16 @@ socket.on('disconnect', function() {
   console.log('Disconnected from server.');
 });
 
+window.addEventListener("message", function (e) {
+  var data = e.data;
+  if (data.corsica) {
+    if (data.message) {
+      var args = data.args || {};
+      args.screen = args.screen || config.name;
+      sendMessage(data.message, args);
+    }
+  }
+});
 
 function requestFullscreen(elem) {
   (elem.requestFullscreen ||
