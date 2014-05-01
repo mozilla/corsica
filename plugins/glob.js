@@ -18,7 +18,7 @@ module.exports = function (corsica) {
   corsica.on('*', function (message) {
     // If there is a * or a ? in the screen name, activate globbing.
     // Otherwise, pass it on unmodified.
-    if ((message.screen || '').match(/[\*\?\+\|]/)) {
+    if (message && (message.screen || '').match(/[\*\?\+\|]/)) {
       var pattern = Minimatch(message.screen);
 
       return corsica.sendMessage('census.clients')
