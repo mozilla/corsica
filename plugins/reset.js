@@ -17,7 +17,7 @@
 
 module.exports = {
   requires: ['settings'],
-  after: ['command'],
+  after: ['settings', 'command'],
 
   init: function(corsica) {
     var useCommand = corsica.config.plugins.indexOf('command') >= 0;

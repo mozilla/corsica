@@ -15,6 +15,7 @@ var Promise = require('es6-promise').Promise;
 
 module.exports = {
   requires: ['settings', 'reset'],
+  after: ['settings'],
 
   init: function (corsica) {
     var settings = corsica.settings.setup('timer', {

@@ -20,7 +20,6 @@ var Promise = require('es6-promise').Promise;
 var lvl = require('lvl');
 
 module.exports = {
-  phase: 0,
   init: function(corsica) {
     corsica.brain = new Brain(corsica);
   },
