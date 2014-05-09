@@ -28,7 +28,7 @@ h1, h2, h3, h4, h5, h6 {
   height: 32px;
   line-height: 29px;
   font-weight: normal;
-  flex-grow: 1;
+  flex-grow: 0;
 }
 
 .topbar {
@@ -37,6 +37,24 @@ h1, h2, h3, h4, h5, h6 {
   overflow: hidden;
   padding: 10px 20px;
   display: flex;
+}
+
+.breadcrumbs {
+  list-style: none;
+  font-size: 20px;
+  font-weight: bold;
+  margin: 0;
+  padding: 0;
+  line-height: 29px;
+}
+
+.breadcrumbs li {
+  display: inline;
+}
+
+.breadcrumbs li:before {
+  content: "/";
+  margin: 0 5px;
 }
 
 article > section {
@@ -68,6 +86,9 @@ article > section {
   padding: 1em;
   margin: -1em -1em 1em -1em;
 }
+.plugin header.row {
+    margin-top: -1em;
+}
 .plugin:nth-child(2n) {
   margin-left: 1em;
   float: right;
@@ -77,7 +98,7 @@ article > section {
   position: relative;
   margin-top: 1em;
 }
-.plugin .row:first-child {
+.plugin .row:first-child:not(header) {
   margin-top: 0;
 }
 .plugin input {
@@ -111,7 +132,7 @@ article > section {
   padding: .5em 1em;
   text-align: right;
 }
-.plugin button {
+button {
   font-size: 1rem;
   padding: .5em 1em;
   border: 0;
@@ -119,11 +140,12 @@ article > section {
   color: #fff;
   float: right;
   cursor: pointer;
+  margin-left: 0.5em;
 }
-.plugin button:hover {
+button:hover {
   background: #8ECD8E;
 }
-.plugin button::-moz-focus-inner {
+button::-moz-focus-inner {
   border: 0;
   padding: 0;
 }
@@ -133,7 +155,8 @@ article > section {
   margin: 0;
   padding: 6px 0 0;
   list-style: none;
-  flex-grow: 0;
+  text-align: right;
+  flex-grow: 1;
 }
 
 .logs ul {

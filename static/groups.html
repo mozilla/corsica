@@ -6,22 +6,26 @@
     <title>Corsica</title>
     <link href="css/admin.css" rel="stylesheet">
   </head>
+
   <body>
     <article>
       <header class="topbar">
         <h1 class="brand">corsica</h1>
         <ul class="breadcrumbs">
-            <li>admin</li>
+          <li>groups</li>
         </ul>
-        <ul class="stats"></ul>
+        <div class="stats">
+          <button id="save">save</button>
+          <button id="add-group">add group</button>
+        </div>
       </header>
-      <section class="controls"></section>
-      <section class="settings"></section>
+      <section class="groups"></section>
     </article>
+
     <script src="/socket.io/socket.io.js"></script>
     <script src="js/promise.js"></script>
     <script src="js/utils.js"></script>
     <script src="js/websockets.js"></script>
-    <script src="js/admin.js"></script>
+    <script src="js/groups.js"></script>
   </body>
 </html>
