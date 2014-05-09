@@ -25,6 +25,7 @@ function init() {
     var specs = message.specs;
     var plugin;
     for (plugin in specs) {
+      if (specs[plugin]._skipUI) continue;
       createSection(plugin, specs[plugin]);
     }
     var sections = document.querySelectorAll('.settings section.plugin');

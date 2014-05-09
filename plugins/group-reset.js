@@ -15,6 +15,7 @@ module.exports = function (corsica) {
   var useCommand = corsica.config.plugins.indexOf('command') >= 0;
 
   var settings = corsica.settings.setup('group-reset', {
+    _skipUI: true,
     groups: [
       {
         search: '*',
