@@ -40,7 +40,6 @@ document.body.addEventListener('click', function (e) {
         group.commands = Array.prototype.map.call(commandEls, function(commandEl) {
           return commandEl.value;
         });
-        // group.commands = group.commands.filter(function(c) { return !!c; });
         return group;
       });
 
@@ -111,7 +110,7 @@ function createGroupSection(group) {
           if (tgt.value.length > 0) {
             var many = tgt.parentNode;
             tgt.classList.remove('empty');
-            many.appendChild(makeEl('input.empty'));
+            many.appendChild(makeEl('input.empty', null, {name: 'command'}));
           }
         }, 0);
       }

@@ -27,7 +27,7 @@ module.exports = function (corsica) {
   corsica.on('reset', function(msg) {
     settings.get().then(function(settings) {
       var screens = msg.screen;
-      if (typeof screen === 'string') {
+      if (typeof screens === 'string') {
         screens = [screens];
       }
 
