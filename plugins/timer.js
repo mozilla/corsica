@@ -16,6 +16,7 @@ var Promise = require('es6-promise').Promise;
 module.exports = function (corsica) {
   var settings = corsica.settings.setup('timer', {
     resetTime: 2 * 60 * 1000,
+    jitter: 15 * 1000,
     resetOnConnect: true,
   });
 
@@ -44,6 +45,7 @@ module.exports = function (corsica) {
 
   function makeTimeout(name) {
     if (name === undefined) {
+      console.log('[timer] Error: No name.')
       return Promise.reject();
     }
     var currentCounter = clientCounters[name] = (clientCounters[name] || 0) + 1;
@@ -55,8 +57,13 @@ module.exports = function (corsica) {
      * incremented, making this promise chain invalid.
      */
     return settings.get()
-      .then(utils.get('resetTime'))
-      .then(utils.timerPromise) // Gets resetTime as an argument.
+      .then(function(settings) {
+        var resetTime = +settings.resetTime;
+        var jitter = +settings.jitter;
+        var offset = jitter * (Math.random() * 2 - 1);
+        var timeout = resetTime + offset;
+        return utils.timerPromise(timeout);
+      })
       .then(function () {
         if (clientCounters[name] !== currentCounter) {
           // The counter got incremented, this chain is no longer valid.
@@ -73,7 +80,11 @@ module.exports = function (corsica) {
 
   corsica.on('content', function (content) {
     // If a screen is getting new content, start a new counter.
-    makeTimeout(content.screen);
+    var screens = content.screen;
+    if (typeof screens === 'string') {
+      screens = [screens];
+    }
+    screens.forEach(makeTimeout);
     return content;
   });
 

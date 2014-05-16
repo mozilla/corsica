@@ -17,11 +17,24 @@ var Minimatch = require('minimatch').Minimatch;
 module.exports = function (corsica) {
   corsica.on('*', function (message) {
     if (message && message.screen) {
-      var pattern = Minimatch(message.screen);
+      var screens = message.screen;
+      if (typeof screens === 'string') {
+        screens = [screens];
+      }
+
+      var patterns = screens.map(Minimatch);
 
       return corsica.sendMessage('census.clients')
       .then(function(data) {
-        message.screen = data.clients.filter(pattern.match.bind(pattern));
+        var matchedScreens = [];
+        patterns.forEach(function(pattern) {
+          screens.forEach(function(screen) {
+            if (pattern.match(screen)) {
+              matchedScreens.push(screen);
+            }
+          });
+        });
+        message.screen = matchedScreens;
         return message;
       });
 
