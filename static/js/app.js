@@ -129,7 +129,7 @@ socket.on('toast', function (msg) {
     return;
   }
   if (msg.text) {
-    toast(msg.text);
+    toast(msg.text,  msg.timeout);
   }
 });
 
