@@ -59,6 +59,7 @@ function toast(message, timeout) {
 }
 function untoast() {
   toastEl.classList.remove('show');
+  clearTimeout(toastTimeout);
 }
 
 var contentEl = document.querySelector('#content');
@@ -152,9 +153,11 @@ socket.on('content', function (msg) {
   switch (type) {
     case 'url':
       handleURL(msg.url);
+      untoast();
       break;
     case 'html':
       handleHTML(msg.content);
+      untoast();
       break;
     default:
       console.log('A voice speaks, in an unintelligible language.');
