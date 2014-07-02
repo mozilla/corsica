@@ -27,6 +27,7 @@ module.exports = function (corsica) {
       return corsica.sendMessage('census.clients')
       .then(function(data) {
         var matchedScreens = [];
+        var screens = data.clients;
         patterns.forEach(function(pattern) {
           screens.forEach(function(screen) {
             if (pattern.match(screen)) {
