@@ -116,16 +116,86 @@ module.exports = function (corsica_) {
 
   corsica.on('admin.getPanels', function(message) {
     message.panels = message.panels || [];
+    var keys = [];
     for (var key in specs) {
-      if (specs[key]._skipUI) {
-        continue;
-      }
-      message.panels.push({
-        id: key,
-        title: key,
-        body: corsica.nunjucks.render('settings.html', {spec: specs[key]}),
-      });
+      keys.push(key);
     }
+    return Promise.all(keys.map(function(key) {
+      return corsica.brain.get('settings::' + key)
+      .then(function(settings) {
+        return [key, corsica.utils.merge(specs[key], settings)];
+      });
+    }))
+    .then(function(allSettings) {
+      allSettings.forEach(function(keyAndSettings) {
+        var key = keyAndSettings[0];
+        var settings = keyAndSettings[1];
+        if (settings._skipUI) {
+          return;
+        }
+        message.panels.push({
+          id: key,
+          class: 'settings',
+          title: key,
+          body: corsica.nunjucks.render('settings.html', {settings: settings}),
+        });
+      });
+
+      return message;
+    });
+  });
+
+  corsica.on('admin.getScripts', function(message) {
+    message.scripts = message.scripts || [];
+    message.scripts.push(corsica.utils.iife(function() {
+      // This function runs on the client.
+
+
+      var settingsEls = document.querySelectorAll('.panel.settings');
+      document.querySelector('.panels').addEventListener('submit', function(e) {
+        // Did this come from a settings panel?
+        var panelEl = e.originalTarget.parentNode.parentNode;
+        if (panelEl.classList.contains('settings')) {
+          e.preventDefault();
+          var formEl = e.originalTarget;
+          var rows = formEl.querySelectorAll('.row');
+          var data = {};
+          var input;
+
+          for (var i = 0; i < rows.length; i++) {
+            if (rows[i].classList.contains('many')) {
+              throw new Error("Can't do many type fields yet.");
+            }
+            input = rows[i].querySelector('input');
+            if (!input) {
+              continue;
+            }
+            if (input.getAttribute('type') === 'checkbox') {
+              data[input.getAttribute('name')] = !!input.checked;
+            } else {
+              data[input.getAttribute('name')] = input.value;
+            }
+          }
+
+          var name = panelEl.getAttribute('id').replace(/^panel\-/, '');
+          panelEl.classList.add('pending');
+
+          console.log('plugin', name, 'data', data);
+          sendMessage('settings.set', {
+            plugin: name,
+            settings: data,
+          })
+          .then(function(msg) {
+            console.log('save ok', msg);
+            panelEl.classList.remove('pending');
+          })
+          .catch(function(err) {
+            console.error('save error', err);
+          });
+
+        }
+      });
+    }));
     return message;
   });
 };

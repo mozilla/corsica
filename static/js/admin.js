@@ -9,7 +9,7 @@ socket.on('disconnect', function () {
 });
 
 socket.on('settings.set', function(opts) {
-  updateUI(opts.plugin, opts.settings);
+  // updateUI(opts.plugin, opts.settings);
 });
 
 socket.on('census.connected', updateCurrentClients);
@@ -25,6 +25,13 @@ function init() {
   sendMessage('admin.getPanels')
   .then(function (msg) {
     msg.panels.forEach(createPanel);
+    return sendMessage('admin.getScripts');
+  })
+  .then(function(msg) {
+    msg.scripts.forEach(function(script) {
+      var scriptEl = makeEl('script', script, {type: 'text/javascript'});
+      document.body.appendChild(scriptEl);
+    });
   });
 
   initCommandAndControl();
@@ -33,10 +40,13 @@ function init() {
 
 function createPanel(panel) {
   var id = 'panel-' + panel.id;
-  console.log('Creating panel', panel.id, panel);
+  console.log('Creating panel', panel.id);
   var panelEl = document.getElementById(id);
   if (!panelEl) {
     panelEl = makeEl('div.panel', null, {id: id});
+    if (panel.class) {
+      panelEl.classList.add(panel.class);
+    }
     panelEl.appendChild(makeEl('header', panel.title));
     var bodyEl = makeEl('div');
     bodyEl.innerHTML = panel.body;
