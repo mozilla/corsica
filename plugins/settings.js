@@ -83,6 +83,16 @@ module.exports = function (corsica_) {
     setup: setup,
   };
 
+  corsica.nunjucks.addFilter('type', function(val) {
+    if (val instanceof Array) {
+      return 'array';
+    } else if (val === true || val === false) {
+      return 'boolean';
+    } else {
+      return 'unknown';
+    }
+  });
+
   corsica.on('settings.getSpecs', function (message) {
     message.specs = specs;
     return message;
@@ -104,4 +114,18 @@ module.exports = function (corsica_) {
     });
   });
 
+  corsica.on('admin.getPanels', function(message) {
+    message.panels = message.panels || [];
+    for (var key in specs) {
+      if (specs[key]._skipUI) {
+        continue;
+      }
+      message.panels.push({
+        id: key,
+        title: key,
+        body: corsica.nunjucks.render('settings.html', {spec: specs[key]}),
+      });
+    }
+    return message;
+  });
 };

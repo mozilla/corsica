@@ -61,7 +61,7 @@ article > section {
   padding: 1em;
 }
 
-.plugin {
+.panel {
   background: #ddd;
   padding: 1em;
   width: calc(50% - .5em);
@@ -69,7 +69,7 @@ article > section {
   margin-bottom: 1em;
   position: relative;
 }
-.plugin.pending:after {
+.panel.pending:after {
   content: '';
   display: block;
   position: absolute;
@@ -80,72 +80,75 @@ article > section {
   background: #000;
   opacity: .5;
 }
-.plugin header {
+.panel header {
   background: #444;
   color: #fff;
   padding: 1em;
   margin: -1em -1em 1em -1em;
 }
-.plugin header.row {
+.panel header.row {
     margin-top: -1em;
 }
-.plugin:nth-child(2n) {
+.panel:nth-child(2n) {
   margin-left: 1em;
   float: right;
 }
 
-.plugin .row {
+.panel .row {
   position: relative;
   margin-top: 1em;
+  display: flex;
 }
-.plugin .row:first-child:not(header) {
+.panel .row:first-child:not(header) {
   margin-top: 0;
 }
-.plugin input {
+.panel .row.right {
+  justify-content: flex-end;
+}
+.panel input {
   font-size: 1rem;
   padding: .5em;
   border: 0;
 }
-.plugin .row input.check {
-  width: 1em;
-  vertical-align: middle;
-}
-.plugin .many, .plugin .row > input {
+.panel .many,
+.panel .row > input {
   vertical-align: top;
   display: inline-block;
-  width: calc(100% - 128px);
   position: relative;
+  flex: 1 1 100%;
 }
-.plugin .many input {
+.panel input.check {
+  margin-top: 12px;
+  flex: 0 0 1em;
+}
+.panel .many input {
   font-size: 1rem;
   display: block;
   width: 100%;
   padding: .5em;
   margin-top: 1em;
 }
-.plugin .many input:first-child {
+.panel .many input:first-child {
   margin-top: 0;
 }
-.plugin label {
-  width: 128px;
-  display: inline-block;
+.panel label {
   padding: .5em 1em;
   text-align: right;
+  min-width: 128px;
 }
-button {
+.panel button {
   font-size: 1rem;
   padding: .5em 1em;
   border: 0;
   background: #5EB95E;
   color: #fff;
-  float: right;
   cursor: pointer;
   margin-left: 0.5em;
 }
-button:hover {
+.panel button:hover {
   background: #8ECD8E;
 }
-button::-moz-focus-inner {
+.panel button::-moz-focus-inner {
   border: 0;
   padding: 0;
 }
@@ -177,18 +180,15 @@ button::-moz-focus-inner {
 }
 
 @media screen and (max-width: 800px) {
-  .plugin {
+  .panel {
     width: 100%;
   }
-  .plugin label {
+  .panel .row {
+    flex-direction: column;
+  }
+  .panel label {
     text-align: left;
     margin-bottom: .5em;
-  }
-  .plugin input {
-    display: block;
-    width: 100%;
-  }
-  .plugin:nth-child(2n) {
-    margin-left: 0;
+    padding-left: 0;
   }
 }
