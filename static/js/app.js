@@ -25,6 +25,9 @@ if (!config) {
   console.log('You\'re new here, aren\'t you.');
   config = {};
 }
+if (!config.tags) {
+  config.tags = [];
+}
 
 function writeConfig() {
   try {
@@ -34,16 +37,35 @@ function writeConfig() {
   }
 }
 
-function payAttention(name) {
-  if (name instanceof Array) {
-    for (var i=0; i<name.length; i++) {
-      if (name[i] === config.name) {
+function payAttention(msg) {
+  console.log(msg);
+  var names = msg.screen;
+  var tags = msg.tags;
+  var i = 0;
+
+  // names
+  if (names instanceof Array) {
+    for (i = 0; i < names.length; i++) {
+      if (names[i] === config.name) {
         return true;
       }
     }
-    return false;
+  } else {
+    if (names === config.name) {
+      return true;
+    }
   }
-  return config.name === name;
+
+  // tags
+  if (tags instanceof Array) {
+    for (i = 0; i < tags.length; i++) {
+      if (config.tags.indexOf(tags[i]) >= 0) {
+        return true;
+      }
+    }
+  }
+
+  return false;
 }
 
 function identify() {
@@ -57,9 +79,38 @@ function toast(message, timeout) {
   toastEl.classList.add('show');
   toastTimeout = setTimeout(untoast, timeout || 5000);
 }
+
 function untoast() {
   toastEl.classList.remove('show');
   clearTimeout(toastTimeout);
+}
+
+
+function addSubscription(tag) {
+  if (!config.tags) {
+    config.tags = [];
+  }
+  var tags = config.tags;
+  if (tags.indexOf(tag) === -1) {
+    tags.push(tag);
+  }
+  toast('added tag subscription `' + tag + '`');
+  sendSubscriptions();
+  writeConfig();
+}
+
+function removeSubscription(tag) {
+  if (!config.tags) {
+    config.tags = [];
+  }
+  var tags = config.tags;
+  var idx = tags.indexOf(tag);
+  if (idx >= 0) {
+    tags.splice(idx, 1);
+  }
+  toast('removed tag subscription `' + tag + '`');
+  sendSubscriptions();
+  writeConfig();
 }
 
 var contentEl = document.querySelector('#content');
@@ -85,9 +136,16 @@ function handleHTML(html) {
 }
 
 function init() {
-  console.log('My name is ' + config.name);
-  sendMessage('init', {name: config.name});
+  console.log('I am ', config.name);
+  sendSubscriptions().then(function () {
+    sendMessage('init', {name: config.name});
+  });
   setupFullscreen();
+}
+
+function sendSubscriptions() {
+  console.log('sending other end');
+  return sendMessage('tags.setSubscriptions', {name: config.name, tags: config.tags});
 }
 
 console.log('Waiting for connection to server...');
@@ -108,12 +166,13 @@ socket.on('connect', function() {
   }
 });
 
+
 socket.on('admin', function (msg) {
   var type = msg.type;
   if (!type) {
     return;
   }
-  if (!payAttention(msg.screen)) {
+  if (!payAttention(msg)) {
     console.log('You receive a message, but it\'s not for you...');
     return;
   }
@@ -121,11 +180,21 @@ socket.on('admin', function (msg) {
     case 'reload':
       window.location.reload();
       break;
+    case 'subscribe':
+      if (msg.tag) {
+        addSubscription(msg.tag);
+      }
+      break;
+    case 'unsubscribe':
+      if (msg.tag) {
+        removeSubscription(msg.tag);
+      }
+      break;
   }
 });
 
 socket.on('toast', function (msg) {
-  if (!payAttention(msg.screen)) {
+  if (!payAttention(msg)) {
     console.log('You receive a message, but it\'s not for you...');
     return;
   }
@@ -135,7 +204,7 @@ socket.on('toast', function (msg) {
 });
 
 socket.on('identify', function (msg) {
-  if (payAttention(msg.screen)) {
+  if (payAttention(msg)) {
     identify();
   }
 });
@@ -146,7 +215,7 @@ socket.on('content', function (msg) {
     console.warn('You thought you heard something. No, just the waves.');
     return;
   }
-  if (!payAttention(msg.screen)) {
+  if (!payAttention(msg)) {
     console.log('You receive a message, but it\'s not for you...');
     return;
   }
