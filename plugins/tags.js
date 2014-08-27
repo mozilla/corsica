@@ -25,6 +25,18 @@ module.exports = function (corsica) {
     ],
   });
 
+  corsica.serveRoute('tags', function(req, res) {
+    var out = '<html>';
+    settings.get().then(function (settings) {
+      out += '<h1>Tags</h1>';
+      out += '<pre>' + JSON.stringify(settings, null, 2) + '</pre>';
+      out += '<h1>Subscriptions</h1>';
+      out += '<pre>' + JSON.stringify(subscriptions, null, 2) + '</pre>';
+      out += '</html>';
+      res.send(out);
+    });
+  });
+
   corsica.on('tags.setSubscriptions', function (msg) {
     console.log('setting tag subscriptions for', msg.name, msg.tags);
     if (msg.tags && msg.name) {
