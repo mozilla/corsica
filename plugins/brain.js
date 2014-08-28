@@ -16,8 +16,13 @@
  * return the original object with updated changes
  */
 
+var fs = require('fs');
+var path = require('path');
+
 var Promise = require('es6-promise').Promise;
-var lvl = require('lvl');
+var PromiseProxy = require('proxied-promise-object');
+var levelup = require('levelup');
+var jsondown = require('jsondown');
 
 function extend() {
   var obj = arguments[0];
@@ -40,22 +45,39 @@ function extend() {
 }
 
 function Brain(corsica) {
-  this.db = lvl(corsica.config.STATE_DIR_PATH);
+  var dbPath;
+  if (corsica.config.STATE_DIR_PATH) {
+    console.warn('Warning: STATE_DIR_PATH should now be a path to a json ' +
+                 'file to store persistence data, and be in STATE_DIR instead.');
+    dbPath = path.join(corsica.config.STATE_DIR_PATH, 'state.json');
+  } else {
+    dbPath = corsica.config.STATE_PATH;
+  }
+  console.log('dbPath', dbPath);
+  var originalDb = levelup(dbPath, {db: jsondown});
+  this.db = new PromiseProxy(Promise, originalDb);
 }
 
 Brain.prototype.get = function(key) {
-  return Promise.cast(this.db.getObj(key))
-    .catch(function(err) {
-      return null;
-    });
+  return this.db.get(key)
+  .then(function(value) {
+    try {
+      return JSON.parse(value);
+    } catch (e) {
+      return value;
+    }
+  })
+  .catch(function(err) {
+    return null;
+  });
 };
 
 Brain.prototype.set = function(key, value) {
-  return Promise.cast(this.db.putObj(key,value));
+  return this.db.put(key, JSON.stringify(value));
 };
 
 Brain.prototype.remove = function(key) {
-  return Promise.cast(this.db.putObj(key, null));
+  return this.db.putObj(key, null);
 };
 
 module.exports = function(corsica) {
