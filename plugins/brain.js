@@ -20,9 +20,6 @@ var fs = require('fs');
 var path = require('path');
 
 var Promise = require('es6-promise').Promise;
-var PromiseProxy = require('proxied-promise-object');
-var levelup = require('levelup');
-var jsondown = require('jsondown');
 
 function extend() {
   var obj = arguments[0];
@@ -45,39 +42,52 @@ function extend() {
 }
 
 function Brain(corsica) {
-  var dbPath;
   if (corsica.config.STATE_DIR_PATH) {
     console.warn('Warning: STATE_DIR_PATH should now be a path to a json ' +
                  'file to store persistence data, and be in STATE_DIR instead.');
-    dbPath = path.join(corsica.config.STATE_DIR_PATH, 'state.json');
+    this.dbPath = path.join(corsica.config.STATE_DIR_PATH, 'state.json');
   } else {
-    dbPath = corsica.config.STATE_PATH;
+    this.dbPath = corsica.config.STATE_PATH;
   }
-  console.log('dbPath', dbPath);
-  var originalDb = levelup(dbPath, {db: jsondown});
-  this.db = new PromiseProxy(Promise, originalDb);
+
+  this.statePromise = new Promise(function(resolve, reject) {
+    fs.readFile(this.dbPath, function(err, contents) {
+      if (err) {
+        console.error(err.stack || err);
+        resolve({});
+      } else {
+        resolve(JSON.parse(contents));
+      }
+    }.bind(this));
+  }.bind(this));
 }
 
 Brain.prototype.get = function(key) {
-  return this.db.get(key)
-  .then(function(value) {
-    try {
-      return JSON.parse(value);
-    } catch (e) {
-      return value;
-    }
-  })
-  .catch(function(err) {
-    return null;
+  return this.statePromise
+  .then(function(state) {
+    return state[key];
   });
 };
 
 Brain.prototype.set = function(key, value) {
-  return this.db.put(key, JSON.stringify(value));
+  return this.statePromise
+  .then(function(state) {
+    state[key] = value;
+    this.statePromise = Promise.resolve(state);
+    return new Promise(function(resolve, reject) {
+      fs.writeFile(this.dbPath, JSON.stringify(state, null, 4), function(err) {
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      });
+    }.bind(this));
+  }.bind(this));
 };
 
 Brain.prototype.remove = function(key) {
-  return this.db.putObj(key, null);
+  return this.set(key, null);
 };
 
 module.exports = function(corsica) {

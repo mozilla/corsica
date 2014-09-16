@@ -101,6 +101,9 @@ module.exports = function (corsica_) {
     return corsica.brain.set('settings::' + plugin, values).then(function () {
       emitters[plugin].emit('updated', values);
       return message;
+    })
+    .catch(function(err) {
+      console.error('error', err.stack);
     });
   });
 
