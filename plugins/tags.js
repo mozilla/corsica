@@ -35,7 +35,7 @@ module.exports = function (corsica) {
       out += '<h1>Tags</h1>';
       out += '<pre>' + insecureScrub(JSON.stringify(settings, null, 2)) + '</pre>';
       out += '<h1>Subscriptions</h1>';
-      out += '<pre>' + insecureScrubJSON.stringify(subscriptions, null, 2)) + '</pre>';
+      out += '<pre>' + insecureScrub(JSON.stringify(subscriptions, null, 2)) + '</pre>';
       out += '</html>';
       res.send(out);
     });
