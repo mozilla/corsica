@@ -1,4 +1,3 @@
-
 console.log(
   'Welcome to Corsica.\n'+
   'To the NORTH there is water.\n'+
@@ -10,24 +9,24 @@ console.log(
 var config;
 try {
   config = localStorage.getItem('config');
-  if (config) {
-    config = JSON.parse(config);
-    if (config) {
-      console.log('Welcome back, old friend.');
-    } else {
-      config = undefined;
-    }
-  }
+  config = JSON.parse(config);
+  console.log('Welcome back, old friend.');
 } catch (e) {
   console.warn('Config could not be parsed: ' + e);
 }
+
 if (!config) {
   console.log('You\'re new here, aren\'t you.');
   config = {};
+  writeConfig();
 }
+
 if (!config.tags) {
   config.tags = [];
+  writeConfig();
 }
+
+// name will come on socket connect
 
 function writeConfig() {
   try {
@@ -44,27 +43,28 @@ function payAttention(msg) {
   var i = 0;
 
   // names
-  if (names instanceof Array) {
-    for (i = 0; i < names.length; i++) {
-      if (names[i] === config.name) {
-        return true;
-      }
-    }
-  } else {
-    if (names === config.name) {
+  if (!(names instanceof Array)) {
+    names = [names];
+  }
+
+  for (i = 0; i < names.length; i++) {
+    if (names[i] === config.name) {
       return true;
     }
   }
 
   // tags
-  if (tags instanceof Array) {
-    for (i = 0; i < tags.length; i++) {
-      if (config.tags.indexOf(tags[i]) >= 0) {
-        return true;
-      }
+  if (!(tags instanceof Array)) {
+    tags = [tags];
+  }
+
+  for (i = 0; i < tags.length; i++) {
+    if (config.tags.indexOf(tags[i]) >= 0) {
+      return true;
     }
   }
 
+  // this message is boring
   return false;
 }
 
@@ -161,9 +161,9 @@ socket.on('connect', function() {
       writeConfig();
       init();
     });
-  } else {
-    init();
+    return;
   }
+  init();
 });
 
 
