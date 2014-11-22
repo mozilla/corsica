@@ -77,7 +77,9 @@ var toastEl = document.querySelector('#toast');
 function toast(message, timeout) {
   toastEl.textContent = message;
   toastEl.classList.add('show');
-  toastTimeout = setTimeout(untoast, timeout || 5000);
+  if (timeout > -1) {
+    toastTimeout = setTimeout(untoast, timeout);
+  }
 }
 
 function untoast() {
