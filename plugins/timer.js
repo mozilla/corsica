@@ -45,7 +45,7 @@ module.exports = function (corsica) {
 
   function makeTimeout(name) {
     if (name === undefined) {
-      console.log('[timer] Error: No name.')
+      console.log('[timer] Error: No name.');
       return Promise.reject();
     }
     var currentCounter = clientCounters[name] = (clientCounters[name] || 0) + 1;
