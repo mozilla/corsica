@@ -58,8 +58,14 @@ module.exports = function (corsica) {
      */
     return settings.get()
       .then(function(settings) {
-        var resetTime = +settings.resetTime;
-        var jitter = +settings.jitter;
+        var resetTime, jitter;
+        if ('screens' in settings && name in settings.screens) {
+          resetTime = parseInt(settings.screens[name].resetTime || settings.resetTime);
+          jitter = parseInt(settings.screens[name].jitter || settings.jitter);
+        } else {
+          resetTime = +settings.resetTime;
+          jitter = +settings.jitter;
+        }
         var offset = jitter * (Math.random() * 2 - 1);
         var timeout = resetTime + offset;
         return utils.timerPromise(timeout);
