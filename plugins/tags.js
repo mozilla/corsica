@@ -24,10 +24,10 @@ module.exports = function (corsica) {
       },
     ],
   });
-  
+
   var insecureScrub = function(str) {
     return str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-  }
+  };
 
   corsica.serveRoute('tags', function(req, res) {
     var out = '<html>';
