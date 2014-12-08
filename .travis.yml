@@ -1,18 +1,19 @@
+sudo: no
 language: node_js
 node_js:
-  - "0.11"
-  - "0.10"
+- '0.11'
+- '0.10'
 matrix:
   allow_failures:
-    - node_js: "0.11"
+  - node_js: '0.11'
 branches:
   only:
-    - master
+  - master
 install:
-    - npm install
-    - npm install jshint
+- npm install
+- npm install jshint
 script:
-    - jshint .
-    - npm test
+- jshint .
+- npm test
 notifications:
   email: false
