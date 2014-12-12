@@ -43,11 +43,12 @@ module.exports = function (corsica) {
     clientCounters[data.name]++;
   });
 
-  function makeTimeout(name) {
+  function makeTimeout(name, customTimeout) {
     if (name === undefined) {
       console.log('[timer] Error: No name.');
       return Promise.reject();
     }
+    // Increment the counter index, and invalidate the old one.
     var currentCounter = clientCounters[name] = (clientCounters[name] || 0) + 1;
 
     /* Get the reset time, wait for that number of milliseconds, reset
@@ -59,16 +60,20 @@ module.exports = function (corsica) {
     return settings.get()
       .then(function(settings) {
         var resetTime, jitter;
-        if ('screens' in settings && name in settings.screens) {
+
+        if (!isNaN(customTimeout)) {
+          resetTime = customTimeout;
+          jitter = 0;
+        } else if ('screens' in settings && name in settings.screens) {
           resetTime = parseInt(settings.screens[name].resetTime || settings.resetTime);
           jitter = parseInt(settings.screens[name].jitter || settings.jitter);
         } else {
           resetTime = +settings.resetTime;
           jitter = +settings.jitter;
         }
+
         var offset = jitter * (Math.random() * 2 - 1);
-        var timeout = resetTime + offset;
-        return utils.timerPromise(timeout);
+        return utils.timerPromise(resetTime + offset);
       })
       .then(function () {
         if (clientCounters[name] !== currentCounter) {
@@ -90,7 +95,9 @@ module.exports = function (corsica) {
     if (typeof screens === 'string') {
       screens = [screens];
     }
-    screens.forEach(makeTimeout);
+    screens.forEach(function(screen) {
+      makeTimeout(screen, parseFloat(content.timeout) * 1000);
+    });
     return content;
   });
 
