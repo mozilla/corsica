@@ -49,7 +49,10 @@ module.exports = function (corsica) {
     return msg;
   });
 
-  corsica.on('reset', function (msg) {
+  corsica.on('reset', reset);
+  corsica.on('clear', clear);
+  
+  function reset(msg) {
     settings.get().then(function (settings) {
 
       var screens = msg.screen;
@@ -84,5 +87,5 @@ module.exports = function (corsica) {
     }).catch(console.error.bind(console));
 
     return msg;
-  });
+  }
 };
