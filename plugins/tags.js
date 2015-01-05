@@ -50,7 +50,7 @@ module.exports = function (corsica) {
   });
 
   corsica.on('reset', reset);
-  corsica.on('clear', clear);
+  corsica.on('clear', reset);
   
   function reset(msg) {
     settings.get().then(function (settings) {
