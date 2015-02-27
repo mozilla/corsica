@@ -1,0 +1,23 @@
+{
+    "name": "Corsica",
+    "description": "Corsica is a server for coordinating screens via web browsers.",
+    "repository": {
+        "url": "https://github.com/mozilla/corsica",
+        "license": "MPL 2.0",
+        "tests": "https://travis-ci.org/mozilla/corsica"
+    },
+    "participate": {
+        "home": "https://github.com/mozilla/corsica",
+        "docs": "https://github.com/mozilla/corsica/blob/master/docs/quickstart.md",
+        "irc": "irc://irc.mozilla.org/#corsica",
+        "irc-contacts": ["potch", "lonnen", "mythmon"]
+    },
+    "bugs": {
+        "list": "https://github.com/mozilla/corsica/issues",
+        "report": "https://github.com/mozilla/corsica/issues/new"
+    },
+    "keywords": [
+        "node.js",
+        "javascript"
+    ]
+}
