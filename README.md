@@ -19,5 +19,5 @@ contributors mozilla/corsica -> https://github.com/mozilla/corsica/graphs/contri
 or even complicated calls to external APIs that create a new page to display:
 
 ```
-meme decreux dost though even hoist? -> http://www.somememe.com/2rwhmpt.jpg
+meme decreux dost thou even hoist? -> http://www.somememe.com/2rwhmpt.jpg
 ```
