@@ -87,6 +87,14 @@ function untoast() {
   clearTimeout(toastTimeout);
 }
 
+function rename(name) {
+  if (!config.name) {
+    config.name = "";
+  }
+  config.name = name;
+  writeConfig();
+  init();
+}
 
 function addSubscription(tag) {
   if (!config.tags) {
@@ -179,6 +187,11 @@ socket.on('admin', function (msg) {
     return;
   }
   switch (type) {
+    case 'rename':
+      if (msg.name) {
+        rename(msg.name);
+      }
+      break;
     case 'reload':
       window.location.reload();
       break;
