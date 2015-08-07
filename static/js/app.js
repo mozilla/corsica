@@ -88,9 +88,6 @@ function untoast() {
 }
 
 function rename(name) {
-  if (!config.name) {
-    config.name = "";
-  }
   config.name = name;
   writeConfig();
   init();
