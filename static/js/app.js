@@ -90,6 +90,7 @@ function untoast() {
 function rename(name) {
   config.name = name;
   writeConfig();
+  identify();
   init();
 }
 
@@ -144,6 +145,7 @@ function handleHTML(html) {
 
 function init() {
   console.log('I am ', config.name);
+  identify();
   sendSubscriptions().then(function () {
     sendMessage('init', {name: config.name});
   });
@@ -160,13 +162,11 @@ console.log('Waiting for connection to server...');
 socket.on('connect', function() {
   console.log('Connection to server established.');
 
+  // fetch name
   if (config.name === undefined) {
     console.log('getting a name');
     sendMessage('getName').then(function(message) {
-      config.name = message.name;
-      console.log(message);
-      writeConfig();
-      init();
+      rename(message.name);
     });
     return;
   }
