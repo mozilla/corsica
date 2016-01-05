@@ -128,18 +128,25 @@ function handleURL(url) {
     sandbox: 'allow-same-origin allow-scripts allow-forms',
     src: url
   });
-  contentEl.innerHTML = '';
-  contentEl.appendChild(iframe);
+  return iframe;
 }
 
 function handleHTML(html) {
-  contentEl.innerHTML = '';
   var blob = new Blob([html], { "type" : "text/html" });
   var url = URL.createObjectURL(blob);
   var iframe = makeEl('iframe', null, {
     sandbox: 'allow-same-origin allow-scripts allow-forms',
     src: url
   });
+  return iframe;
+}
+
+function updateDisplay(iframe, msg) {
+  var zoom = parseInt(msg.zoom) || 100;
+  iframe.style.width = (10000/zoom) + '%';
+  iframe.style.height = (10000/zoom) + '%';
+  iframe.style.transform = 'scale(' + (zoom/100) + ')';
+  contentEl.innerHTML = '';
   contentEl.appendChild(iframe);
 }
 
@@ -233,11 +240,11 @@ socket.on('content', function (msg) {
   }
   switch (type) {
     case 'url':
-      handleURL(msg.url);
+      updateDisplay(handleURL(msg.url), msg);
       untoast();
       break;
     case 'html':
-      handleHTML(msg.content);
+      updateDisplay(handleHTML(msg.content), msg);
       untoast();
       break;
     default:

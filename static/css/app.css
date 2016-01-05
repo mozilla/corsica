@@ -68,6 +68,7 @@ button {
   border: 0;
   background: #fff;
   pointer-events: none;
+  transform-origin: left top;
 }
 
 #toast {
