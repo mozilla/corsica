@@ -9,12 +9,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/mythmon/corsica.git"
+    "url": "git://github.com/mozilla/corsica.git"
   },
   "author": "Mozilla",
   "license": "MPLv2",
   "bugs": {
-    "url": "https://github.com/mythmon/corsica/issues"
+    "url": "https://github.com/mozilla/corsica/issues"
   },
   "dependencies": {
     "es6-promise": "0.1.2",
