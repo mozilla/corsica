@@ -41,6 +41,11 @@ module.exports = function (corsica) {
     });
   });
 
+  corsica.on('tags.getSubscriptions', function(message) {
+    message.subscriptions = subscriptions;
+    return message;
+  });
+
   corsica.on('tags.setSubscriptions', function (msg) {
     console.log('setting tag subscriptions for', msg.name, msg.tags);
     if (msg.tags && msg.name) {
@@ -51,7 +56,7 @@ module.exports = function (corsica) {
 
   corsica.on('reset', reset);
   corsica.on('clear', reset);
-  
+
   function reset(msg) {
     settings.get().then(function (settings) {
 
