@@ -96,7 +96,7 @@ function parser(str, msg) {
     msgType = 'content';
   }
 
-  return {type: msgType, message: msg}
+  return {type: msgType, message: msg};
 }
 
 module.exports.parser = parser;
