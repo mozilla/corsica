@@ -3,9 +3,6 @@ language: node_js
 node_js:
 - '4.7.3'
 - '7.5.0'
-matrix:
-  allow_failures:
-  - node_js: '0.11'
 branches:
   only:
   - master
