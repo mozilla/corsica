@@ -80,6 +80,29 @@ module.exports = function (corsica) {
           }
         });
 
+        commands = commands.filter(function (command) {
+          var c = corsica.parseCommand(command).message;
+
+          var from;
+          var to;
+
+          if (c.from) {
+            from = Date.parse(c.from);
+          } else {
+            from = 0;
+          }
+
+          if (c.to) {
+            to = Date.parse(c.to);
+          } else {
+            to = Infinity;
+          }
+
+          var now = Date.now();
+
+          return from < now && now < to;
+        });
+
         console.log('sampling from', commands.length, 'commands:', commands);
 
         if (commands.length) {
