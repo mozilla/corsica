@@ -3,7 +3,7 @@ var assert = require('assert');
 var commandPlugin = require('../../plugins/command');
 
 function result(o) {
-  return Object.assign({ message: { _args: [] } }, o)
+  return Object.assign({ message: { _args: [] } }, o);
 }
 
 assert.deepEqual(
