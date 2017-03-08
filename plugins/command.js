@@ -22,38 +22,23 @@ var url = require('url');
 
 module.exports = function(corsica) {
 
+  corsica.parseCommand = parser;
+
   corsica.on('command', function(msg) {
     console.log('command', msg);
 
-    var tokens = parser(msg.raw);
-    var msgType = tokens[0];
-    var parsedUrl = url.parse(tokens[0]);
+    var result = parser(msg.raw, msg);
 
-    msg._args = [];
-    tokens.slice(1).forEach(function(token) {
-      if (token.indexOf('=') > -1) {
-        var parts = token.split('=');
-        msg[parts[0]] = parts.slice(1).join('=');
-      } else {
-        msg._args.push(token);
-      }
-    });
+    corsica.sendMessage(result.type, result.message);
 
-    if (parsedUrl.protocol) {
-      // Found a url, special case.
-      msg.url = tokens[0];
-      msg.type = 'url';
-      msgType = 'content';
-    }
-
-    corsica.sendMessage(msgType, msg);
     return msg;
   });
 };
 
 
 /* Parse space separated tokens, allowing for both quotes and escaping quotes. */
-function parser(str) {
+function parser(str, msg) {
+  msg = msg || {};
   var tokens = [];
   var quotes = false;
   var curToken = '';
@@ -91,7 +76,27 @@ function parser(str) {
 
   _push();
 
-  return tokens;
+  var msgType = tokens[0];
+  var parsedUrl = url.parse(tokens[0]);
+
+  msg._args = [];
+  tokens.slice(1).forEach(function(token) {
+    if (token.indexOf('=') > -1) {
+      var parts = token.split('=');
+      msg[parts[0]] = parts.slice(1).join('=');
+    } else {
+      msg._args.push(token);
+    }
+  });
+
+  if (parsedUrl.protocol) {
+    // Found a url, special case.
+    msg.url = tokens[0];
+    msg.type = 'url';
+    msgType = 'content';
+  }
+
+  return {type: msgType, message: msg}
 }
 
 module.exports.parser = parser;

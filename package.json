@@ -19,8 +19,8 @@
   "dependencies": {
     "es6-promise": "0.1.2",
     "express": "3.4.8",
-    "minimatch": "0.2.14",
-    "request": "2.34.0",
-    "socket.io": "0.9.16"
+    "minimatch": "^3.0.3",
+    "request": "^2.80.0",
+    "socket.io": "^1.7.3"
   }
 }
