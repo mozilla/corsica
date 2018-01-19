@@ -83,24 +83,24 @@ module.exports = function (corsica) {
         commands = commands.filter(function (command) {
           var c = corsica.parseCommand(command).message;
 
-          var from;
-          var to;
+          var start;
+          var end;
 
-          if (c.from) {
-            from = Date.parse(c.from);
+          if (c.start) {
+            start = Date.parse(c.start);
           } else {
-            from = 0;
+            start = 0;
           }
 
-          if (c.to) {
-            to = Date.parse(c.to);
+          if (c.end) {
+            end = Date.parse(c.end);
           } else {
-            to = Infinity;
+            end = Infinity;
           }
 
           var now = Date.now();
 
-          return from < now && now < to;
+          return start < now && now < end;
         });
 
         console.log('sampling from', commands.length, 'commands:', commands);
