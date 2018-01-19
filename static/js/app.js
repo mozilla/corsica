@@ -22,7 +22,7 @@ if (!config) {
 }
 
 if (!config.tags) {
-  config.tags = [];
+  config.tags = ['default'];
   writeConfig();
 }
 
