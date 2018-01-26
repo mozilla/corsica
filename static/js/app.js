@@ -69,6 +69,7 @@ function payAttention(msg) {
 }
 
 function identify() {
+  document.querySelector('#name').textContent = config.name;
   toast('I am ' + config.name, 10000);
 }
 
