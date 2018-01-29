@@ -55,7 +55,7 @@ and ctrl-C to stop it.
 
 You can use the npm start command in a screen session to test your installation, but for production use it makes more sense to run Corsica in the background so it will run unattended.  If you already have a process manager running on your machine, you can use that.
 
-There's not a default process manager on the Raspberry Pi, but we can use the (Forever NPM)[https://www.npmjs.com/package/forever] to do the job.
+There's not a default process manager on the Raspberry Pi, but we can use the [Forever NPM](https://www.npmjs.com/package/forever) to do the job.
 
 	sudo npm install forever --global
 
