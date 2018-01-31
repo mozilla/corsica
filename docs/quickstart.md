@@ -1,4 +1,5 @@
 # Corsica
+This document is intended for people who are comfortable reading the code to understand what's happening.   For everyone else the best place to start is probably the Absolute Beginner's guide to Corsica on a Raspberry Pi.  You'll find it in docs/raspi.md.  
 
 ## Getting Started with Corsica
 
