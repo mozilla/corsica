@@ -1,0 +1,38 @@
+{
+    "settings::timer": {
+        "resetTime": 30000,
+        "jitter": 5000,
+        "resetOnConnect": true,
+        "screens": {
+            "TestClient": {
+                "resetTime": 10000,
+                "jitter": 1000
+            }
+        }
+    },
+    "settings::tags": {
+        "tags": [
+            {
+                "name": "default",
+                "commands": [
+                    "https://ramilewski.github.io/corsica-support/show.html?image=wilbur.png",
+                    "https://ramilewski.github.io/corsica-support/show.html?image=puppy.png",
+                    "https://ramilewski.github.io/corsica-support/show.html?image=kitty.png"
+                ]
+            },
+            {
+                "name": "images",
+                "commands": [
+                    "https://ramilewski.github.io/corsica-support/bunny.png bg=#2244bb",
+                    "https://ramilewski.github.io/corsica-support/teddy.png bg=#2244bb"
+                ]
+            },
+            {
+            	"name": "weather",
+            	"commands": [
+                    "https://forecast.io/embed/#lat=37.3352&lon=-121.8871&name=San%20Jose%20CA&color=#4466bb zoom=300"
+            	]
+            }
+        ]
+    }
+}
