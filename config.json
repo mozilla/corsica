@@ -1,2 +1,0 @@
-plugins=["brain", "census", "settings", "command", "content", "timer", "namer", "glob", "tags"]
-
