@@ -1,6 +1,8 @@
 #An Absolute Beginner's Guide to Corsica on a Raspberry PI
 #####Rev 0.9
 
+These instructions are also available as an [Instructable](https://www.instructables.com/id/A-Digital-Sign-Server-on-a-Raspberry-Pi/).
+
 Digital signs are everywhere. You see them in airports, malls, department stores and even street corners. You don't need a lot of expensive custom hardware to build your own digital sign system. This Instructable show how to build a digital signage server that can drive dozens of displays. Each display can be as simple as a monitor and a Raspberry PI.
 
 Thanks to the Node Ninjas at Mozilla you can even run the server on a Raspberry Pi using Corsica.

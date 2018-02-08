@@ -1,5 +1,5 @@
 # Corsica
-This document is intended for people who are comfortable reading the code to understand what's happening.   For everyone else the best place to start is probably the Absolute Beginner's guide to Corsica on a Raspberry Pi.  You'll find it in docs/raspi.md.  
+This document is intended for people who are comfortable reading the code to understand what's happening.   For everyone else the best place to start is probably the Absolute Beginner's guide to Corsica on a Raspberry Pi.  You'll find it in docs/raspi.md and repackaged as an [Instructable](https://www.instructables.com/id/A-Digital-Sign-Server-on-a-Raspberry-Pi/).
 
 ## Getting Started with Corsica
 
