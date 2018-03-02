@@ -6,6 +6,8 @@ Empathic screens for the masses.
 
 ## Looking for Mozilla's Corsica deployment?
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/mozilla/corsica.svg)](https://greenkeeper.io/)
+
 Suggest content, plugin changes, and administrative changes here: https://github.com/mozilla/moz-corsica
 
 ## What is Corsica? How should I use it?
