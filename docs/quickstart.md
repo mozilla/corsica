@@ -10,7 +10,7 @@ your package manager, or checkout out Joyent's
 Onve you've got that set up, grab a copy of this repo and install the
 dependencies:
 
-    % git checkout git@github.com:mozilla/corsica.git
+    % git clone git@github.com:mozilla/corsica.git
     % cd corsica
     % npm install
 
