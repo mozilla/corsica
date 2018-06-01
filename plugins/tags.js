@@ -14,13 +14,15 @@ module.exports = function (corsica) {
   var useCommand = corsica.config.plugins.indexOf('command') >= 0;
 
   var subscriptions = {};
+  var sequencePosition = {};
 
   var settings = corsica.settings.setup('tags', {
     _skipUI: true,
     tags: [
       {
         name: 'default',
-        commands: ['http://xkcd.com'],
+        random: false,
+        commands: []
       },
     ],
   });
@@ -103,12 +105,21 @@ module.exports = function (corsica) {
           return start < now && now < end;
         });
 
-        console.log('sampling from', commands.length, 'commands:', commands);
-
+        var index;
         if (commands.length) {
-          var index = Math.floor(Math.random() * commands.length);
+          if (settings.random) {
+            console.log('sampling from', commands.length, 'commands');
+            index = Math.floor(Math.random() * commands.length);
+          } else {
+            index = sequencePosition[screen.toString()] || 0;
+            console.log('sequence position: ' + index + '/' + (commands.length - 1));
+            console.log(index, commands.length);
+            if (index >= commands.length) {
+              index = 0;
+            }
+            sequencePosition[screen.toString()] = index + 1;
+          }
           var command = commands[index] + ' screen=' + screen;
-
           corsica.sendMessage('command', {raw: command});
         }
       });
