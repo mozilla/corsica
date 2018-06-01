@@ -1,4 +1,5 @@
 # Corsica
+This document is intended for people who are comfortable reading the code to understand what's happening.   For everyone else the best place to start is probably the Absolute Beginner's guide to Corsica on a Raspberry Pi.  You'll find it in docs/raspi.md and repackaged as an [Instructable](https://www.instructables.com/id/A-Digital-Sign-Server-on-a-Raspberry-Pi/).
 
 ## Getting Started with Corsica
 
@@ -9,7 +10,7 @@ your package manager, or checkout out Joyent's
 Onve you've got that set up, grab a copy of this repo and install the
 dependencies:
 
-    % git checkout git@github.com:mozilla/corsica.git
+    % git clone git@github.com:mozilla/corsica.git
     % cd corsica
     % npm install
 
