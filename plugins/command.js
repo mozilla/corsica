@@ -18,30 +18,25 @@
  * `sendMessage('content', {url: <theurl>, type: 'url', <any extra args>})
  */
 
-var url = require('url');
+const url = require('url');
 
-module.exports = function(corsica) {
+module.exports = function (corsica) {
 
   corsica.parseCommand = parser;
 
-  corsica.on('command', function(msg) {
+  corsica.on('command', msg => {
     console.log('command', msg);
-
-    var result = parser(msg.raw, msg);
-
-    corsica.sendMessage(result.type, result.message);
-
+    const { type, message } = parser(msg.raw, msg);
+    corsica.sendMessage(type, message);
     return msg;
   });
 };
 
-
 /* Parse space separated tokens, allowing for both quotes and escaping quotes. */
-function parser(str, msg) {
-  msg = msg || {};
-  var tokens = [];
-  var quotes = false;
-  var curToken = '';
+function parser(str, msg = {}) {
+  const tokens = [];
+  let quotes = false;
+  let curToken = '';
 
   function _push() {
     if (curToken) {
@@ -50,7 +45,7 @@ function parser(str, msg) {
     curToken = '';
   }
 
-  for (var i = 0; i < str.length; i++) {
+  for (let i = 0; i < str.length; i++) {
     if (str[i] === '\\') {
       i++;
       curToken += str[i];
@@ -76,18 +71,18 @@ function parser(str, msg) {
 
   _push();
 
-  var msgType = tokens[0];
-  var parsedUrl = url.parse(tokens[0]);
+  const parsedUrl = url.parse(tokens[0]);
+  let msgType = tokens[0];
 
   msg._args = [];
-  tokens.slice(1).forEach(function(token) {
-    if (token.indexOf('=') > -1) {
-      var parts = token.split('=');
+  for (const token of tokens.slice(1)) {
+    if (token.includes('=')) {
+      const parts = token.split('=');
       msg[parts[0]] = parts.slice(1).join('=');
     } else {
       msg._args.push(token);
     }
-  });
+  }
 
   if (parsedUrl.protocol) {
     // Found a url, special case.
@@ -96,7 +91,7 @@ function parser(str, msg) {
     msgType = 'content';
   }
 
-  return {type: msgType, message: msg};
+  return { type: msgType, message: msg };
 }
 
 module.exports.parser = parser;

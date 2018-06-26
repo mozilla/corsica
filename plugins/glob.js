@@ -11,36 +11,31 @@
  *    mythmon
  */
 
-var Promise = require('es6-promise').Promise;
-var Minimatch = require('minimatch').Minimatch;
+const { Minimatch } = require('minimatch');
 
 module.exports = function (corsica) {
-  corsica.on('*', function (message) {
+  corsica.on('*', async message => {
     if (message && message.screen) {
-      var screens = message.screen;
-      if (typeof screens === 'string') {
-        screens = [screens];
+      let patternTexts = message.screen;
+      if (typeof patternTexts === 'string') {
+        patternTexts = [patternTexts];
       }
 
-      var patterns = screens.map(Minimatch);
+      const patterns = patternTexts.map(Minimatch);
 
-      return corsica.sendMessage('census.clients')
-      .then(function(data) {
-        var matchedScreens = [];
-        var screens = data.clients;
-        patterns.forEach(function(pattern) {
-          screens.forEach(function(screen) {
-            if (pattern.match(screen)) {
-              matchedScreens.push(screen);
-            }
-          });
-        });
-        message.screen = matchedScreens;
-        return message;
-      });
-
-    } else {
-      return message;
+      const data = await corsica.sendMessage('census.clients');
+      const matchedScreens = new Set();
+      screens = data.clients;
+      for (const pattern of patterns) {
+        for (const screen of screens) {
+          if (pattern.match(screen)) {
+            matchedScreens.add(screen);
+          }
+        }
+      }
+      message.screen = Array.from(matchedScreens);
     }
+
+    return message;
   });
 };

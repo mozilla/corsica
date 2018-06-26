@@ -11,24 +11,22 @@
  *    mythmon
  */
 
-var Promise = require('es6-promise').Promise;
+module.exports = corsica => {
+  const clients = {};
 
-module.exports = function (corsica) {
-  var clients = {};
-
-  corsica.on('client.connected', function(data) {
+  corsica.on('client.connected', data => {
     console.log('Client connected. id: ', data._sid);
     return data;
   });
 
-  corsica.on('init', function(data) {
+  corsica.on('init', data => {
     console.log('Client initialize', data._sid, data.name);
     clients[data._sid] = data.name;
     corsica.sendMessage('census.connected', data);
     return data;
   });
 
-  corsica.on('client.disconnected', function(data) {
+  corsica.on('client.disconnected', data => {
     console.log('Client disconnected. id: ', data._sid);
     if (data._sid in clients) {
       data.name = clients[data._sid];
@@ -39,20 +37,16 @@ module.exports = function (corsica) {
   });
 
   function clientNames() {
-    var names = [];
-    for (var key in clients) {
-      names.push(clients[key]);
-    }
-    return names;
+    return Object.values(clients);
   }
 
-  corsica.on('census.clients', function(message) {
+  corsica.on('census.clients', message => {
     message.clients = clientNames();
     message.count = message.clients.length;
     return message;
   });
 
-  corsica.on('census.count', function(message) {
+  corsica.on('census.count', message => {
     message.count = clientNames().length;
     return message;
   });

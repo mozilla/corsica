@@ -1,8 +1,7 @@
 sudo: no
 language: node_js
 node_js:
-- '4.7.3'
-- '7.5.0'
+- '10'
 - 'node'
 branches:
   only:

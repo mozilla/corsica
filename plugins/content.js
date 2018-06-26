@@ -10,8 +10,8 @@
  * Author:
  *    mythmon
  */
-module.exports = function(corsica) {
-  corsica.on('content', function(content) {
+module.exports = function (corsica) {
+  corsica.on('content', content => {
     if (content.type === undefined) {
       if (content.url) {
         content.type = 'url';

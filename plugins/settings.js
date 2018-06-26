@@ -5,12 +5,11 @@
  *   Brain
  */
 
-var Promise = require('es6-promise').Promise;
-var EventEmitter = require("events").EventEmitter;
+const EventEmitter = require("events").EventEmitter;
 
-var specs = {};
-var emitters = {};
-var corsica;
+const specs = {};
+const emitters = {};
+let corsica;
 
 /* Setup a settings namespace.
  *
@@ -45,31 +44,24 @@ var corsica;
  *       object containings the new settings.
  */
 function setup(name, defaults) {
-  var key = 'settings::' + name;
+  const key = 'settings::' + name;
   specs[name] = defaults;
 
-  var setupDeferred = new Promise(function (resolve, reject) {
-    corsica.brain.get(key)
-      .then(function (settings) {
-        settings = settings || {};
-        resolve(corsica.brain.set(key, settings));
-      });
+  const setupPromise = new Promise(async resolve => {
+    const settings = await corsica.brain.get(key) || {};
+    await corsica.brain.set(key, settings);
   });
 
   var emitter = new EventEmitter();
-  emitter.get = function () {
-    return setupDeferred
-      .then(function () {
-        return corsica.brain.get(key);
-      })
-      .then(function (settings) {
-        return corsica.utils.merge(defaults, settings);
-      });
+  emitter.get = async () => {
+    await setupPromise;
+    const settings = await corsica.brain.get(key);
+    return corsica.utils.merge(defaults, settings);
   };
-  emitter.set = function (value) {
-    return setupDeferred.then(function () {
-      return corsica.brain.set(key, value);
-    });
+
+  emitter.set = async value => {
+    await setupPromise;
+    await corsica.brain.set(key, value);
   };
 
   emitters[name] = emitter;
@@ -79,32 +71,27 @@ function setup(name, defaults) {
 
 module.exports = function (corsica_) {
   corsica = corsica_;
-  corsica.settings = {
-    setup: setup,
-  };
+  corsica.settings = { setup };
 
-  corsica.on('settings.getSpecs', function (message) {
+  if (!corsica.brain) {
+    throw new Error('Plugin "settings" requires plugin "brain".');
+  }
+
+  corsica.on('settings.getSpecs', message => {
     message.specs = specs;
     return message;
   });
 
-  corsica.on('settings.get', function (message) {
-    return corsica.brain.get('settings::' + message.plugin).then(function (settings) {
-      message.settings = corsica.utils.merge(specs[message.plugin], settings);
-      return message;
-    });
+  corsica.on('settings.get', async message => {
+    const setttings = await corsica.brain.get(`settings::${message.plugin}`);
+    message.settings = corsica.utils.merge(specs[message.plugin], settings);
+    return message;
   });
 
-  corsica.on('settings.set', function (message) {
-    var plugin = message.plugin;
-    var values = message.settings;
-    return corsica.brain.set('settings::' + plugin, values).then(function () {
-      emitters[plugin].emit('updated', values);
-      return message;
-    })
-    .catch(function(err) {
-      console.error('error', err.stack);
-    });
+  corsica.on('settings.set', async message => {
+    const { plugin, settings } = message;
+    await corsica.brain.set(`settings::${plugin}`, settings);
+    emitters[plugin].emit('updated', settings);
+    return message;
   });
-
 };

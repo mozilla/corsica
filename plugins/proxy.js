@@ -9,9 +9,9 @@
  *   None
  */
 
-var request = require('request');
+const request = require('request');
 
-module.exports = function(corsica) {
-  var proxyUrl = corsica.config.http_proxy || corsica.config.HTTP_PROXY;
-  corsica.request = corsica.request.defaults({'proxy': proxyUrl});
+module.exports = function (corsica) {
+  const proxyUrl = corsica.config.http_proxy || corsica.config.HTTP_PROXY;
+  corsica.request = corsica.request.defaults({ 'proxy': proxyUrl });
 };

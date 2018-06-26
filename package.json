@@ -3,6 +3,9 @@
   "version": "2.3.0",
   "description": "Ephemeral screens for the masses.",
   "main": "index.js",
+  "engines": {
+    "node": "^10"
+  },
   "scripts": {
     "test": "find tests -name '*_test.js' | xargs -n 1 -t node",
     "start": "node index.js"
@@ -17,8 +20,7 @@
     "url": "https://github.com/mozilla/corsica/issues"
   },
   "dependencies": {
-    "es6-promise": "0.1.2",
-    "express": "3.4.8",
+    "express": "^3.4.8",
     "express-enforces-ssl": "^1.1.0",
     "helmet": "^3.5.0",
     "minimatch": "^3.0.3",
