@@ -8,6 +8,7 @@
   },
   "scripts": {
     "test": "find tests -name '*_test.js' | xargs -n 1 -t node",
+    "lint": "eslint lib static/js",
     "start": "node index.js"
   },
   "repository": {
@@ -15,7 +16,7 @@
     "url": "git://github.com/mozilla/corsica.git"
   },
   "author": "Mozilla",
-  "license": "MPLv2",
+  "license": "MPL-2.0",
   "bugs": {
     "url": "https://github.com/mozilla/corsica/issues"
   },
@@ -26,5 +27,8 @@
     "minimatch": "^3.0.3",
     "request": "^2.80.0",
     "socket.io": "^1.7.3"
+  },
+  "devDependencies": {
+    "eslint": "^5.0.1"
   }
 }

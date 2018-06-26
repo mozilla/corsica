@@ -1,17 +1,13 @@
 sudo: no
 language: node_js
-node_js:
-- '10'
-- 'node'
 branches:
   only:
   - master
 install:
 - npm install
-- npm install jshint
 script:
-- jshint .
-- npm test
+- npm run lint
+- npm run test
 notifications:
   email: false
 deploy:

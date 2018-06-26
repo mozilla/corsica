@@ -238,7 +238,7 @@ socket.on('content', msg => {
 });
 
 let hudTimeout;
-document.body.addEventListener('mousemove', function (e) {
+document.body.addEventListener('mousemove', () => {
   document.body.classList.add('show-hud');
   clearTimeout(hudTimeout);
   hudTimeout = setTimeout(() => {

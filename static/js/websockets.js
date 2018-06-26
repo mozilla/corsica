@@ -1,5 +1,6 @@
-/* global socket:true */
-/* Socket.IO connections */
+/* exported socket, sendMessage */
+
+// Socket.IO connections
 const socket = io.connect('/');
 
 (function () {
@@ -9,7 +10,7 @@ const socket = io.connect('/');
   socket.$emit = function (...args) {
     originalSocketEmit.apply(socket, args);
     for (const listener of listeners) {
-      list.apply(socket, args);
+      listener.apply(socket, args);
     }
   };
 
@@ -18,7 +19,7 @@ const socket = io.connect('/');
   };
 })();
 
-const sendMessage = (function () {
+var sendMessage = (function () {
   const messageReciepts = {};
   let nextId = 0;
 

@@ -1,5 +1,6 @@
+/* exported makeEls */
 
-function makeEl(s, text, attr) {
+var makeEls = function (s, text, attr) {
   const [tag, classes = []] = s.split('.');
   var el = document.createElement(tag);
   el.className = classes.join(' ');
