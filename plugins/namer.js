@@ -33,7 +33,7 @@ module.exports = function (corsica) {
     console.log('getName');
     try {
       const names = await namesPromise;
-      var i = Math.floor(Math.random() * names.length);
+      const i = Math.floor(Math.random() * names.length);
       message.name = names[i];
     } catch (err) {
       message.name = corsica.utils.randomId();

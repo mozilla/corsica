@@ -1,6 +1,6 @@
-var assert = require('assert');
+const assert = require('assert');
 
-var theCore = require('../lib/core');
+const theCore = require('../lib/core');
 
 
-assert(true, "100% COVERAGE");
+assert(theCore, "100% COVERAGE");

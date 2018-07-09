@@ -11,12 +11,10 @@
  */
 
 module.exports = function (corsica) {
-  const useCommand = corsica.config.plugins.indexOf('command') >= 0;
-
   const subscriptions = {};
   const sequencePosition = {};
 
-  const settings = corsica.settings.setup('tags', {
+  const settingsInterface = corsica.settings.setup('tags', {
     _skipUI: true,
     tags: [
       {
@@ -29,11 +27,10 @@ module.exports = function (corsica) {
 
   function insecureScrub(str) {
     return str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-  };
+  }
 
   corsica.serveRoute('tags', async (req, res) => {
-    let out = '<html>';
-    const settings = await settings.get();
+    const settings = await settingsInterface.get();
     res.send(`
       <html>
         <h1>Tags</h1>
@@ -61,15 +58,15 @@ module.exports = function (corsica) {
   corsica.on('clear', reset);
 
   async function reset(msg) {
-    const settings = await settings.get();
-    const screens = msg.screen;
+    const settings = await settingsInterface.get();
+    let screens = msg.screen;
+    let commands = [];
     if (typeof screens === 'string') {
       screens = [screens];
     }
 
     for (const screen of screens) {
       console.log('resetting', screen);
-      const commands = [];
       const subs = subscriptions[screen];
 
       if (!subs) {
@@ -99,22 +96,24 @@ module.exports = function (corsica) {
       return start < now && now < end;
     });
 
-    let index;
     if (commands.length) {
-      if (settings.random) {
-        console.log('sampling from', commands.length, 'commands');
-        index = Math.floor(Math.random() * commands.length);
-      } else {
-        index = sequencePosition[screen.toString()] || 0;
-        console.log('sequence position: ' + index + '/' + (commands.length - 1));
-        console.log(index, commands.length);
-        if (index >= commands.length) {
-          index = 0;
+      for (const screen of screens) {
+        let index;
+        if (settings.random) {
+          console.log('sampling from', commands.length, 'commands');
+          index = Math.floor(Math.random() * commands.length);
+        } else {
+          index = sequencePosition[screen.toString()] || 0;
+          console.log('sequence position: ' + index + '/' + (commands.length - 1));
+          console.log(index, commands.length);
+          if (index >= commands.length) {
+            index = 0;
+          }
+          sequencePosition[screen.toString()] = index + 1;
         }
-        sequencePosition[screen.toString()] = index + 1;
+        const command = commands[index] + ' screen=' + screen;
+        corsica.sendMessage('command', { raw: command });
       }
-      const command = commands[index] + ' screen=' + screen;
-      corsica.sendMessage('command', { raw: command });
     }
 
     return msg;

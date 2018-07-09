@@ -101,7 +101,7 @@ function removeSubscription(tag) {
   if (!config.tags) {
     config.tags = [];
   }
-  var idx = config.tags.indexOf(tag);
+  const idx = config.tags.indexOf(tag);
   if (idx >= 0) {
     config.tags.splice(idx, 1);
   }
@@ -290,7 +290,7 @@ function toggleFullScreen(elem) {
 }
 
 function setupFullscreen() {
-  var contentElem = document.querySelector('#app');
+  const contentElem = document.querySelector('#app');
 
   // Be optimistic, this might work.
   requestFullscreen(contentElem);

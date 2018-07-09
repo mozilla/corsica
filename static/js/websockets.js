@@ -1,7 +1,7 @@
 /* exported socket, sendMessage */
 
 // Socket.IO connections
-const socket = io.connect('/');
+var socket = io.connect('/');
 
 (function () {
   const listeners = [];

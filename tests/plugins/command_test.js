@@ -1,6 +1,6 @@
-var assert = require('assert');
+const assert = require('assert');
 
-var commandPlugin = require('../../plugins/command');
+const commandPlugin = require('../../plugins/command');
 
 function result(o) {
   return Object.assign({ message: { _args: [] } }, o);

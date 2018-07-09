@@ -25,7 +25,7 @@ module.exports = function (corsica) {
 
       const data = await corsica.sendMessage('census.clients');
       const matchedScreens = new Set();
-      screens = data.clients;
+      const screens = data.clients;
       for (const pattern of patterns) {
         for (const screen of screens) {
           if (pattern.match(screen)) {

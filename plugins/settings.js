@@ -47,12 +47,12 @@ function setup(name, defaults) {
   const key = 'settings::' + name;
   specs[name] = defaults;
 
-  const setupPromise = new Promise(async resolve => {
+  const setupPromise = new Promise(async () => {
     const settings = await corsica.brain.get(key) || {};
     await corsica.brain.set(key, settings);
   });
 
-  var emitter = new EventEmitter();
+  const emitter = new EventEmitter();
   emitter.get = async () => {
     await setupPromise;
     const settings = await corsica.brain.get(key);
@@ -83,7 +83,7 @@ module.exports = function (corsica_) {
   });
 
   corsica.on('settings.get', async message => {
-    const setttings = await corsica.brain.get(`settings::${message.plugin}`);
+    const settings = await corsica.brain.get(`settings::${message.plugin}`);
     message.settings = corsica.utils.merge(specs[message.plugin], settings);
     return message;
   });
