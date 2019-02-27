@@ -3,7 +3,8 @@ console.log(
   'To the NORTH there is water.\n'+
   'To the WEST there is water.\n'+
   'To the EAST there is water.\n'+
-  'To the SOUTH there is water.'
+  'To the SOUTH there is water.\n'+
+  'By your side is a rock with XYZZY carved on it.'
 );
 
 var config;
@@ -151,8 +152,56 @@ function updateDisplay(iframe, msg) {
   contentEl.appendChild(iframe);
 }
 
+
 function init() {
-  console.log('I am ', config.name);
+ 
+  	let params = (new URL(document.location)).searchParams;
+
+  	if (params) {
+
+  		let myname = params.get('name');
+  			if (myname) {
+  		   		config.name = myname;
+  		   		writeConfig();		
+  		   	}
+
+		let mydefault = params.get('default');
+		if (mydefault){
+			console.log("Replacing default subscription with \"" + mydefault + "\"");
+			config.tags = [mydefault];
+			writeConfig();
+		}
+		
+		let tags2add = params.get('subscribe');
+	   	if (tags2add) {
+	   		let tagset = tags2add.split(",");
+	   		tagset.forEach(addSubscription);
+	   		if (tagset.length = 1) {
+	   			console.log("Adding 1 new subscription.");
+	   		} else {
+	   			console.log("Adding " + tags2add.length + " new subscriptions.");
+	   		}
+		}
+
+		let tags2drop = params.get('unsubscribe');
+		if (tags2drop) {
+			let tagset = tags2drop.split(",");
+	   		tagset.forEach(removeSubscription);
+   			if (tagset.length = 1) {
+	   			console.log("Dropping 1 subscription.");
+	   		} else {
+	   			console.log("Dropping " + tags2drop.length + " subscriptions.");
+	   		}
+		}
+
+        let logtext = ("My name is "+ config.name + " and I'm subscribed to:");
+        config.tags.forEach(function(thetag) {
+        	logtext += (" " + thetag + ",");
+        })
+        console.log(logtext.slice(0,-1) + "."); 
+	}
+   
+
   identify();
   sendSubscriptions().then(function () {
     sendMessage('init', {name: config.name});
