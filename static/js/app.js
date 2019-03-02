@@ -160,40 +160,52 @@ function init() {
     
   	if (params) {
 
-  		var myname = params.get('name') + params.get("n");
+  		var myname = params.get('name');
+  			if (! myname) {
+  				myname = params.get('n');
+  			}
   			if (myname) {
   		   		config.name = myname;
   		   		writeConfig();		
   		   	}
 
-		var mydefault = params.get('default') + params.get("d");
-		if (mydefault){
-			console.log("Replacing default subscription with \"" + mydefault + "\"");
-			config.tags = [mydefault];
-			writeConfig();
-		}
+		var mydefault = params.get('default');
+			if (! mydefault) {
+				mydefault = params.get('d');
+			}
+			if (mydefault){
+				console.log("Replacing default subscription with \"" + mydefault + "\"");
+				config.tags = [mydefault];
+				writeConfig();
+			}
 		
-		var tags2add = params.get('subscribe') + params.get("s");
-	   	if (tags2add) {
-	   		tagset = tags2add.split(",");
-	   		tagset.forEach(addSubscription);
-	   		if (tagset.length == 1) {
-	   			console.log("Adding 1 new subscription.");
-	   		} else {
-	   			console.log("Adding " + tags2add.length + " new subscriptions.");
-	   		}
-		}
+		var tags2add = params.get('subscribe');
+			if (! tags2add) { 
+				tags2add = params.get('s');
+			}
+		   	if (tags2add) {
+		   		tagset = tags2add.split(",");
+		   		tagset.forEach(addSubscription);
+		   		if (tagset.length == 1) {
+		   			console.log("Adding 1 new subscription.");
+		   		} else {
+		   			console.log("Adding " + tags2add.length + " new subscriptions.");
+		   		}
+			}
 
-		var tags2drop = params.get('unsubscribe') + params.get("u");
-		if (tags2drop) {
-		 	tagset = tags2drop.split(",");
-	   		tagset.forEach(removeSubscription);
-   			if (tagset.length == 1) {
-	   			console.log("Dropping 1 subscription.");
-	   		} else {
-	   			console.log("Dropping " + tags2drop.length + " subscriptions.");
-	   		}
-		}
+		var tags2drop = params.get('unsubscribe');
+			if (! tags2drop) {
+				 tags2drop = params.get('u');
+			}
+			if (tags2drop) {
+			 	tagset = tags2drop.split(",");
+		   		tagset.forEach(removeSubscription);
+	   			if (tagset.length == 1) {
+		   			console.log("Dropping 1 subscription.");
+		   		} else {
+		   			console.log("Dropping " + tags2drop.length + " subscriptions.");
+		   		}
+			}
 
         var logtext = ("My name is "+ config.name + " and I'm subscribed to:");
         config.tags.forEach(function(thetag) {
