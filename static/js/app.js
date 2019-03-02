@@ -155,49 +155,50 @@ function updateDisplay(iframe, msg) {
 
 function init() {
  
-  	let params = (new URL(document.location)).searchParams;
-
+  	var params = (new URL(document.location)).searchParams;
+    var tagset;
+    
   	if (params) {
 
-  		let myname = params.get('name');
+  		var myname = params.get('name') + params.get("n");
   			if (myname) {
   		   		config.name = myname;
   		   		writeConfig();		
   		   	}
 
-		let mydefault = params.get('default');
+		var mydefault = params.get('default') + params.get("d");
 		if (mydefault){
 			console.log("Replacing default subscription with \"" + mydefault + "\"");
 			config.tags = [mydefault];
 			writeConfig();
 		}
 		
-		let tags2add = params.get('subscribe');
+		var tags2add = params.get('subscribe') + params.get("s");
 	   	if (tags2add) {
-	   		let tagset = tags2add.split(",");
+	   		tagset = tags2add.split(",");
 	   		tagset.forEach(addSubscription);
-	   		if (tagset.length = 1) {
+	   		if (tagset.length == 1) {
 	   			console.log("Adding 1 new subscription.");
 	   		} else {
 	   			console.log("Adding " + tags2add.length + " new subscriptions.");
 	   		}
 		}
 
-		let tags2drop = params.get('unsubscribe');
+		var tags2drop = params.get('unsubscribe') + params.get("u");
 		if (tags2drop) {
-			let tagset = tags2drop.split(",");
+		 	tagset = tags2drop.split(",");
 	   		tagset.forEach(removeSubscription);
-   			if (tagset.length = 1) {
+   			if (tagset.length == 1) {
 	   			console.log("Dropping 1 subscription.");
 	   		} else {
 	   			console.log("Dropping " + tags2drop.length + " subscriptions.");
 	   		}
 		}
 
-        let logtext = ("My name is "+ config.name + " and I'm subscribed to:");
+        var logtext = ("My name is "+ config.name + " and I'm subscribed to:");
         config.tags.forEach(function(thetag) {
         	logtext += (" " + thetag + ",");
-        })
+        });
         console.log(logtext.slice(0,-1) + "."); 
 	}
    
