@@ -17,12 +17,12 @@
     "url": "https://github.com/mozilla/corsica/issues"
   },
   "dependencies": {
-    "es6-promise": "0.1.2",
-    "express": "3.4.8",
+    "es6-promise": "^0.1.2",
+    "express": "^3.21.2",
     "express-enforces-ssl": "^1.1.0",
-    "helmet": "^3.5.0",
-    "minimatch": "^3.0.3",
-    "request": "^2.80.0",
-    "socket.io": "^1.7.3"
+    "helmet": "^3.15.1",
+    "minimatch": "^3.0.4",
+    "request": "^2.88.0",
+    "socket.io": "^1.7.4"
   }
 }
