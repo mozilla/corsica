@@ -374,7 +374,10 @@ function toggleFullScreen(elem) {
 function setupFullscreen() {
     var contentElem = document.querySelector('#app');
 
-    // Be optimistic, this might work.
+    // optimistic attempt for dedicated ambient displays that
+    // are modified to allow fullscreen without user action
+    // i.e. kiosk setups without dedicated inputs
+    console.log("trying kiosk mode, may throw an uncatchable TypeError");
     requestFullscreen(contentElem);
 
     document.addEventListener('keydown', function(e) {

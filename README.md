@@ -14,7 +14,7 @@ Corsica is a server for coordinating screens via web browsers. Content comes fro
 
 Chat bots, browser plugins, or website widgets can use the API to control nearby screens. This is useful for Posting graphs, GIFs, slides, or public announcements. Plugins provide a playlist-like rotation from a list of URLs for ambient dashboards of application metrics, promotional pages, event calendars, etc.
 
-Since Corsica can push content to any modern webbrowser the screens can be monitors, tablets, phones, smart TVs, cars, etc.
+Since Corsica can push content to any modern web browser the screens can be monitors, tablets, phones, smart TVs, cars, etc.
 
 ## How do I extend Corsica?
 
@@ -52,4 +52,16 @@ content type=html content="<style>@keyframes AnimationName{0%{background-positio
 Requests can be made to external APIs and the result can be used in the creation of a new URL or new static content.
 ```
 meme decreux dost thou even hoist? -> http://www.somememe.com/2rwhmpt.jpg -> content type=url url=http://www.somememe.com/2rwhmpt.jpg
+```
+
+## How do I set up a Kiosk client?
+
+Corsica clients rely on WebAPIs that MUST be initiated by a user action in modern web browsers. You may find it useful to change your browser configuration on managed deployments (Raspberry Pi, Mac Mini, NUC).
+
+Launch Chrome with the kiosk flag: `--kiosk "<<your corsica server url>>"`
+
+If you're running in Firefox, you can change the following preferences in `about:preferences` or add the following lines to `user.js` in the profile directory:
+```
+user_pref("full-screen-api.allow-trusted-requests-only", false);
+user_pref("full-screen-api.approval-required", false);
 ```
