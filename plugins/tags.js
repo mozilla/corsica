@@ -43,6 +43,13 @@ module.exports = function (corsica) {
     });
   });
 
+  corsica.on('tags.getTags', function(message) {
+    return settings.get().then(function(settings) {
+      message.tags = settings.tags;
+      return message;
+    });
+  })
+
   corsica.on('tags.getSubscriptions', function(message) {
     message.subscriptions = subscriptions;
     return message;
