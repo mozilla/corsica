@@ -5,7 +5,6 @@
  *   Brain
  */
 
-var Promise = require('es6-promise').Promise;
 var EventEmitter = require("events").EventEmitter;
 
 var specs = {};

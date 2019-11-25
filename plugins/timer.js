@@ -11,8 +11,6 @@
  *    mythmon
  */
 
-var Promise = require('es6-promise').Promise;
-
 module.exports = function (corsica) {
   var settings = corsica.settings.setup('timer', {
     resetTime: 2 * 60 * 1000,

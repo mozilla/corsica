@@ -19,8 +19,6 @@
 var fs = require('fs');
 var path = require('path');
 
-var Promise = require('es6-promise').Promise;
-
 function extend() {
   var obj = arguments[0];
   var sources = [];

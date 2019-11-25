@@ -10,8 +10,6 @@
 var fs = require('fs');
 var path = require('path');
 
-var Promise = require('es6-promise').Promise;
-
 var staticPath = path.resolve(path.join(path.dirname(__filename), '..', 'static'));
 
 

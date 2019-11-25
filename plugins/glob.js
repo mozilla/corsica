@@ -11,7 +11,6 @@
  *    mythmon
  */
 
-var Promise = require('es6-promise').Promise;
 var Minimatch = require('minimatch').Minimatch;
 
 module.exports = function (corsica) {
