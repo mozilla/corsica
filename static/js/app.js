@@ -377,7 +377,8 @@ function setupFullscreen() {
     // optimistic attempt for dedicated ambient displays that
     // are modified to allow fullscreen without user action
     // i.e. kiosk setups without dedicated inputs
-    console.log("trying kiosk mode, may throw an uncatchable TypeError");
+    console.log("KIOSK MODE MAY THROW AN UNCATCHABLE TypeError UNLESS CLIENT BROWSER CONFIG IS CHANGED TO ALLOW FULL SCREEN WITHOUT A USER INITIATING EVENT");
+    console.log("see https://stackoverflow.com/questions/9454125/javascript-request-fullscreen-is-unreliable");
     requestFullscreen(contentElem);
 
     document.addEventListener('keydown', function(e) {
