@@ -16,7 +16,7 @@
  * return the original object with updated changes
  */
 
-var fs = require('fs');
+var fs = require('fs').promises;
 var path = require('path');
 
 function extend() {
@@ -39,7 +39,7 @@ function extend() {
   return obj;
 }
 
-function Brain(corsica) {
+async function Brain(corsica) {
   if (corsica.config.STATE_DIR_PATH) {
     console.warn('Warning: STATE_DIR_PATH should now be a path to a json ' +
                  'file to store persistence data, and be in STATE_DIR instead.');
@@ -48,44 +48,23 @@ function Brain(corsica) {
     this.dbPath = corsica.config.STATE_PATH;
   }
 
-  this.statePromise = new Promise(function(resolve, reject) {
-    fs.readFile(this.dbPath, function(err, contents) {
-      if (err) {
-        console.error(err.stack || err);
-        resolve({});
-      } else {
-        resolve(JSON.parse(contents));
-      }
-    }.bind(this));
-  }.bind(this));
+  let contents = await fs.readFile(this.dbPath);
+
+  this.state = await JSON.parse(contents);
 }
 
-Brain.prototype.get = function(key) {
-  return this.statePromise
-  .then(function(state) {
-    return state[key];
-  });
+Brain.prototype.get = async function(key) {
+  return await this.state[key];
 };
 
-Brain.prototype.set = function(key, value) {
-  return this.statePromise
-  .then(function(state) {
-    state[key] = value;
-    this.statePromise = Promise.resolve(state);
-    return new Promise(function(resolve, reject) {
-      fs.writeFile(this.dbPath, JSON.stringify(state, null, 4), function(err) {
-        if (err) {
-          reject(err);
-        } else {
-          resolve();
-        }
-      });
-    }.bind(this));
-  }.bind(this));
+Brain.prototype.set = async function(key, value) {
+  this.state[key] = value;
+
+  return await fs.writeFile(this.dbPath, JSON.stringify(this.state, null, 4);
 };
 
-Brain.prototype.remove = function(key) {
-  return this.set(key, null);
+Brain.prototype.remove = async function(key) {
+  return await this.set(key, null);
 };
 
 module.exports = function(corsica) {

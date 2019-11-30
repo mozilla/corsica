@@ -43,17 +43,12 @@ var corsica;
  *   'updated' - fired when the settings are updated. Called with an
  *       object containings the new settings.
  */
-function setup(name, defaults) {
+async function setup(name, defaults) {
   var key = 'settings::' + name;
   specs[name] = defaults;
 
-  var setupDeferred = new Promise(function (resolve, reject) {
-    corsica.brain.get(key)
-      .then(function (settings) {
-        settings = settings || {};
-        resolve(corsica.brain.set(key, settings));
-      });
-  });
+  var settings = await corsica.brain.get(ket) || {};
+  var setupDeferred = await corsica.brain.set(key, settings);
 
   var emitter = new EventEmitter();
   emitter.get = function () {
