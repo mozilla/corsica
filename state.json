@@ -1,0 +1,33 @@
+{
+    "settings::timer": {
+        "resetTime": 120000,
+        "jitter": 15000,
+        "resetOnConnect": true,
+        "screens": {
+            "moc1": {
+                "resetTime": 1200000,
+                "jitter": 600000
+            },
+            "moc3": {
+                "resetTime": 1200000,
+                "jitter": 600000
+            }
+        }
+    },
+    "settings::tags": {
+        "tags": [
+            {
+                "name": "ambient",
+                "random": true,
+                "commands": [
+                    "https://toms-home.co.uk/img/no_image.png",
+                    "http://www.nyan.cat/index.php?cat=j5",
+                    "https://toms-home.co.uk/img/steelcon-bg.png",
+                    "https://olp.utcsheffield.org.uk/images/utc-sheffield-olp.png"
+                ]
+            },
+            {
+            }
+        ]
+    }
+}

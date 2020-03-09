@@ -43,6 +43,7 @@ module.exports = function (corsica) {
     });
   });
 
+  corsica.on('tags.get', function(message) {
     return settings.get().then(function(settings) {
       return {"tags": settings.tags};
     });
