@@ -17,8 +17,8 @@
     "url": "https://github.com/mozilla/corsica/issues"
   },
   "dependencies": {
-    "express": "^4.0.0",
     "es6-promise": "^4.2.8",
+    "express": "^4.17.1",
     "express-enforces-ssl": "^1.1.0",
     "helmet": "^4.4.1",
     "minimatch": "^3.0.4",
