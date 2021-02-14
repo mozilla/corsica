@@ -12,7 +12,7 @@
     "url": "git://github.com/mozilla/corsica.git"
   },
   "author": "Mozilla",
-  "license": "MPLv2",
+  "license": "MPL-2.0",
   "bugs": {
     "url": "https://github.com/mozilla/corsica/issues"
   },
