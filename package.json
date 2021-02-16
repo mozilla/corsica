@@ -12,19 +12,19 @@
     "url": "git://github.com/mozilla/corsica.git"
   },
   "author": "Mozilla",
-  "license": "MPLv2",
+  "license": "MPL-2.0",
   "bugs": {
     "url": "https://github.com/mozilla/corsica/issues"
   },
   "dependencies": {
-    "es6-promise": "^0.1.2",
-    "express": "^4.0.0",
+    "es6-promise": "^4.2.8",
+    "express": "^4.17.1",
     "express-enforces-ssl": "^1.1.0",
-    "helmet": "^3.15.1",
+    "helmet": "^4.4.1",
     "minimatch": "^3.0.4",
-    "request": "^2.88.0",
-    "socket.io": "^1.7.4",
+    "request": "^2.88.2",
     "compression": "^1.7.4",
-    "body-parser": "^1.19.0"
+    "body-parser": "^1.19.0",
+    "socket.io": "^3.1.1"
   }
 }
